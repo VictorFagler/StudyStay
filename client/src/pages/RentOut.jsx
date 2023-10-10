@@ -1,13 +1,4 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import {
-  BsHouseDoor,
-  BsBuildings,
-  BsDoorOpen,
-  BsPeople,
-  BsFilterLeft,
-} from "react-icons/Bs";
 
 const FilterModal = () => {
   const [minAmount, setMinAmount] = useState("");

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -130,12 +131,24 @@ export const Navbar = () => {
                     </Link>
                   </li>
                   <li className="border-t-2  border-gray-300 py-3">
-                    <button
-                      className=" text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase"
-                      onClick={logoutHandler}
-                    >
-                      Logga ut
-                    </button>
+                    <Link to="/register">
+                      <button
+                        className=" text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase"
+                        onClick={logoutHandler}
+                      >
+                        register
+                      </button>
+                    </Link>
+                  </li>
+                  <li className="border-t-2  border-gray-300 py-3">
+                    <Link to="/login">
+                      <button
+                        className=" text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase"
+                        onClick={logoutHandler}
+                      >
+                        Logga in
+                      </button>
+                    </Link>
                   </li>
                 </ul>
               </div>

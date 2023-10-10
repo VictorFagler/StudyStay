@@ -13,10 +13,12 @@
     "@clerk/clerk-js": "^4.59.1",
     "@clerk/clerk-react": "^4.26.1",
     "@material-tailwind/react": "^2.1.2",
+    "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.16.0"
   },

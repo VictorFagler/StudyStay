@@ -1,16 +1,16 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const cors = require('cors');
 
+app.use(
+  cors({
+    credentials: true, // Allow credentials
+    origin: "http://localhost:5173", // Specify the origin(s) of your React app
+  })
+);
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-app.use(cors())
-app.use(express.urlencoded({ extended: false }))
-app.use(express.json())
-
-
-
-// app.use('/api/product', require('./controllers/productControl'))
-// app.use('/api/user', require('./controllers/userControl'))
-// app.use('/api/admin', require('./controllers/adminControl'))
+app.use("/", require("./routes/authRoutes"));
 
 module.exports = app;

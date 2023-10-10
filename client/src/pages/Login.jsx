@@ -1,9 +1,11 @@
-import { LoginCard } from "../components/LoginCard";
+import React from "react";
+import LoginForm from "../components/LoginForm";
+import axios from 'axios'
 
-export const Login = () => {
+export default function Login() {
   return (
-    <div className="h-screen flex items-center justify-center">
-      <LoginCard />
+    <div>
+      <LoginForm />
     </div>
   );
-};
+}
