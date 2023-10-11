@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  BsHouseDoor,
-  BsBuildings,
-  BsDoorOpen,
-  BsPeople,
-  BsFilterLeft,
-} from "react-icons/Bs";
+import { BsHouseDoor, BsBuildings, BsDoorOpen, BsPeople } from "react-icons/Bs";
 import FilterModal from "./modals/FilterModal";
 
 const Filter = () => {

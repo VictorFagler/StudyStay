@@ -9,10 +9,7 @@ module.exports = withMT({
   ],
   theme: {
     extend: {},
-    colors: {
-      primary: "E78121",
-      // secondary: ''
-    },
+    colors: {},
   },
   plugins: [],
 });

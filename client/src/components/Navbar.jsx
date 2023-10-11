@@ -1,11 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { AiOutlineMenu } from "react-icons/ai";
-import { BsHouseDoor } from "react-icons/Bs";
+// import { BsHouseDoor } from "react-icons/bs";
+import { UserContext } from "../../context/userContext";
+import axios from "axios";
 
 export const Navbar = () => {
+  const { user, setUser } = useContext(UserContext);
+  useEffect(() => {
+    console.log("User in Navbar (before logout):", user);
+  }, [user]);
+  useEffect(() => {
+    console.log("Navbar re-rendered with user:", user);
+  }, [user]);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
@@ -17,15 +26,19 @@ export const Navbar = () => {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   };
 
-  const logoutHandler = () => {
-    // Add your logout logic here, e.g., clearing user session, redirecting, etc.
-    console.log("Logging out...");
+  // Function to handle logout
+  const logoutHandler = async () => {
+    try {
+      await axios.post("/logout");
+      setUser(null);
+      console.log("Logging out...");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
-  // Create a ref for the profile menu to check if it was clicked
   const profileMenuRef = useRef(null);
 
-  // Close the profile menu when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -36,14 +49,12 @@ export const Navbar = () => {
       }
     };
 
-    // Add the event listener when the profile menu is open
     if (isProfileMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Clean up the event listener
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -51,7 +62,7 @@ export const Navbar = () => {
 
   return (
     <nav className="bg-white relative">
-      <div className="flex justify-between items-center text-black py-5 px-8">
+      <div className="flex justify between items-center text-black py-5 px-8">
         <div className="flex items-center">
           <Link to="/" className="absolute">
             <img src="studystay-logo.png" alt="Logo" className="scale-75" />
@@ -76,8 +87,8 @@ export const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/rentout" className="text-black flex mx-8">
-              Hyr ut <BsHouseDoor size={16} className="mt-2 ml-2" />
+            <Link to="/rentout" className="text-black">
+              Hyr ut
             </Link>
           </li>
           <li>
@@ -95,17 +106,17 @@ export const Navbar = () => {
             </button>
             {isProfileMenuOpen && (
               <div
-                ref={profileMenuRef} // Set the ref for the profile menu
+                ref={profileMenuRef}
                 className="absolute bg-white border border-t-0 border-gray-300 shadow"
                 style={{ right: "0", top: "100%", zIndex: 9999 }}
               >
                 <ul className="w-80 px-10 py-8 text-center">
                   <li className="py-3">
-                    <Link to="/" className="text-black">
+                    <Link to="/profile" className="text-black">
                       Min profil
                     </Link>
                   </li>
-                  <li className="border-t-2  border-gray-300 py-3">
+                  <li className="border-t-2 border-gray-300 py-3">
                     <Link to="/" className="text-black">
                       Bostäder
                     </Link>
@@ -125,30 +136,33 @@ export const Navbar = () => {
                       Villkor
                     </Link>
                   </li>
-                  <li className="border-t-2 border-gray-300 py-3 w-full">
-                    <Link to="/" className="text-black">
+                  <li className="border-t-2 border-gray-300 py-3">
+                    <Link to="/rentout" className="text-black">
                       Hyr ut
                     </Link>
                   </li>
-                  <li className="border-t-2  border-gray-300 py-3">
-                    <Link to="/register">
-                      <button
-                        className=" text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase"
-                        onClick={logoutHandler}
-                      >
-                        register
-                      </button>
+                  <li className="border-t-2 border-gray-300 py-3">
+                    <Link to="/about" className="text-black">
+                      Om oss
                     </Link>
                   </li>
-                  <li className="border-t-2  border-gray-300 py-3">
-                    <Link to="/login">
-                      <button
-                        className=" text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase"
-                        onClick={logoutHandler}
-                      >
-                        Logga in
-                      </button>
-                    </Link>
+                  <li className="border-t-2 border-gray-300 py-3">
+                    {user ? (
+                      <div>
+                        <button
+                          className="text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase"
+                          onClick={logoutHandler}
+                        >
+                          Logga ut
+                        </button>
+                      </div>
+                    ) : (
+                      <Link to="/login">
+                        <button className="text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase">
+                          Logga in
+                        </button>
+                      </Link>
+                    )}
                   </li>
                 </ul>
               </div>
