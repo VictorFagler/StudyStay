@@ -8,12 +8,6 @@ import axios from "axios";
 
 export const Navbar = () => {
   const { user, setUser } = useContext(UserContext);
-  useEffect(() => {
-    console.log("User in Navbar (before logout):", user);
-  }, [user]);
-  useEffect(() => {
-    console.log("Navbar re-rendered with user:", user);
-  }, [user]);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);

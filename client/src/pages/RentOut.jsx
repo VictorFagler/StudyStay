@@ -1,22 +1,75 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
-const FilterModal = () => {
+const newListing = () => {
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [minAmount, setMinAmount] = useState("");
-  const [maxAmount, setMaxAmount] = useState("");
+  // const [maxAmount, setMaxAmount] = useState("");
   const [numRooms, setNumRooms] = useState("");
   const [numBathrooms, setNumBathrooms] = useState("");
   const [numFloors, setNumFloors] = useState("");
-  const [accommodationType, setAccommodationType] = useState("Lägenhet");
+  const [unitType, setUnitType] = useState("Lägenhet");
   const [amenities, setAmenities] = useState([]);
+  const [street, setStreet] = useState("");
+  const [streetNumber, setstreetNumber] = useState();
+  const [city, setcity] = useState();
+  const [zipcode, setzipcode] = useState();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Min Amount:", minAmount);
-    console.log("Max Amount:", maxAmount);
-    console.log("Number of Rooms:", numRooms);
-    console.log("Number of Bathrooms:", numBathrooms);
-    console.log("Accommodation Type:", accommodationType);
-    console.log("Selected Amenities:", amenities);
+
+    const missingFields = [];
+    if (!unitType) {
+      missingFields.push("unitType");
+    }
+    if (!street) {
+      missingFields.push("Gata");
+    }
+    if (!streetNumber) {
+      missingFields.push("Gatunummer");
+    }
+    if (!city) {
+      missingFields.push("Stad");
+    }
+    if (!zipcode) {
+      missingFields.push("Postnummer");
+    }
+    if (missingFields.length > 0) {
+      const missingFieldNames = missingFields.join(", ");
+      toast.error(`Fält saknas: ${missingFieldNames}`);
+      return; // Do not proceed with the request
+    }
+
+    if (isFormSubmitted)
+      try {
+        console.log("Data to be sent:", {
+          unitType,
+          street,
+        });
+        const { data } = await axios.post(
+          "/listings",
+          {
+            unitType,
+            street,
+            streetNumber,
+            city,
+            zipcode,
+            // minAmount,
+          },
+          { withCredentials: true }
+        );
+        if (data.error) {
+          toast.error(data.error);
+        } else {
+          // Reset the unitType and other form values if necessary
+          setUnitType("Lägenhet");
+          // ... Reset other form values here
+          toast.success("Listing created");
+        }
+      } catch (error) {
+        console.log(error);
+      }
   };
 
   const handleAmenitiesChange = (e) => {
@@ -27,14 +80,18 @@ const FilterModal = () => {
       setAmenities([...amenities, amenity]);
     }
   };
+  const handleListBoendeClick = () => {
+    // Set the form submission flag to true when "Lista boende" is clicked
+    setIsFormSubmitted(true);
+  };
 
   const clearFilters = () => {
     setMinAmount("");
     setMaxAmount("");
     setNumRooms("");
     setNumBathrooms("");
-    setAccommodationType("");
     setAmenities([]);
+    setUnitType("Lägenhet"); // Reset the unit type to a default value
   };
 
   return (
@@ -54,38 +111,38 @@ const FilterModal = () => {
             </p>
 
             {/* BOENDETYP VAL */}
-            <div className="accommodation-options flex flex-col md:flex-row justify-center md:px-10">
+            <div className="unitType-options flex flex-col md:flex-row justify-center md:px-10">
               <button
-                className={`accommodation-button ${
-                  accommodationType === "Lägenhet" ? "selected" : ""
+                className={`unitType-button ${
+                  unitType === "Lägenhet" ? "selected" : ""
                 } p-2 border w-full rounded-t-xl  border-gray-400 md:border-l-xl
                       md:rounded-l-xl md:rounded-r-none`}
-                onClick={() => setAccommodationType("Lägenhet")}
+                onClick={() => setUnitType("Lägenhet")}
               >
                 Lägenhet
               </button>
               <button
-                className={`accommodation-button ${
-                  accommodationType === "Hus" ? "selected" : ""
+                className={`unitType-button ${
+                  unitType === "Hus" ? "selected" : ""
                 } p-2 border w-full px-4 border-gray-400`}
-                onClick={() => setAccommodationType("Hus")}
+                onClick={() => setUnitType("Hus")}
               >
                 Hus
               </button>
               <button
-                className={`accommodation-button ${
-                  accommodationType === "Korridor" ? "selected" : ""
+                className={`unitType-button ${
+                  unitType === "Korridor" ? "selected" : ""
                 } p-2 border w-full px-4 border-gray-400 `}
-                onClick={() => setAccommodationType("Korridor")}
+                onClick={() => setUnitType("Korridor")}
               >
                 Korridor
               </button>
               <button
-                className={`accommodation-button ${
-                  accommodationType === "Rum" ? "selected" : ""
+                className={`unitType-button ${
+                  unitType === "Rum" ? "selected" : ""
                 } p-2 border w-full rounded-b-xl border-gray-400 
                       md:rounded-r-xl md:rounded-l-none`}
-                onClick={() => setAccommodationType("Rum")}
+                onClick={() => setUnitType("Rum")}
               >
                 Rum
               </button>
@@ -103,42 +160,45 @@ const FilterModal = () => {
                 type="string"
                 id="street"
                 name="street"
-                value={minAmount}
+                value={street}
                 placeholder="Strandvägen"
-                onChange={(e) => setMinAmount(e.target.value)}
+                onChange={(e) => {
+                  setStreet(e.target.value);
+                  console.log(street); // Add this line to debug
+                }}
               />
 
               <p className="text-sm">Nummer</p>
               <input
                 className="border-2 rounded px-2 py-1 w-full"
-                type="string"
-                id="street"
-                name="street"
-                value={minAmount}
+                type="string, number"
+                id="streetNumber"
+                name="streetNumber"
+                value={streetNumber}
                 placeholder="19B"
-                onChange={(e) => setMinAmount(e.target.value)}
+                onChange={(e) => setstreetNumber(e.target.value)}
               />
 
               <p className="text-sm">Stad</p>
               <input
                 className="border-2 rounded px-2 py-1 w-full"
                 type="string"
-                id="street"
-                name="street"
-                value={minAmount}
+                id="city"
+                name="city"
+                value={city}
                 placeholder="Stockholm"
-                onChange={(e) => setMinAmount(e.target.value)}
+                onChange={(e) => setcity(e.target.value)}
               />
 
               <p className="text-sm">Postnummer</p>
               <input
                 className="border-2 rounded px-2 py-1 w-full"
-                type="string"
-                id="street"
-                name="street"
-                value={minAmount}
+                type="number"
+                id="zipcode"
+                name="zipcode"
+                value={zipcode}
                 placeholder="132 31"
-                onChange={(e) => setMinAmount(e.target.value)}
+                onChange={(e) => setzipcode(e.target.value)}
               />
             </div>
           </div>
@@ -331,6 +391,7 @@ const FilterModal = () => {
               Rensa alla
             </button>
             <button
+              onClick={handleListBoendeClick}
               type="submit"
               className="bg-orange-600 rounded-xl px-4 py-0.5 flex justify-center text-white"
             >
@@ -342,4 +403,4 @@ const FilterModal = () => {
     </React.Fragment>
   );
 };
-export default FilterModal;
+export default newListing;
