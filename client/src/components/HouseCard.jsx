@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -32,55 +33,57 @@ export default function HouseCard() {
   return (
     <div className="flex flex-wrap w-30 h-30 justify-center m-4">
       {data.map((item, index) => (
-        <Card key={index} className="max-w-[20rem] shadow-lg max-h-[24rem]">
-          <CardHeader floated={false} color="blue-gray">
-            <div className="relative h-44 w-full">
-              {item.images.length > 0 && (
-                <img
-                  src={`data:${item.images[0].contentType};${item.images[0].data[0]}`}
-                  alt={item.title}
-                  className="h-full w-full object-cover"
-                />
-              )}
-              <div className="to-bg-black-10 absolute inset-0 w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
-            </div>
-            {/* Add other CardHeader content */}
-          </CardHeader>
-          <CardBody>
-            <div className="mb-3 flex items-center justify-between">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-medium truncate w-36"
-              >
-                {item.unitType}
-              </Typography>
-              <Typography
-                color="blue-gray"
-                className="flex items-center gap-1.5 font-normal"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="-mt-0.5 h-5 w-5 text-yellow-700"
+        <Link key={index} to={`/listings/${item._id}`}>
+          <Card key={index} className="max-w-[20rem] shadow-lg max-h-[24rem]">
+            <CardHeader floated={false} color="blue-gray">
+              <div className="relative h-44 w-full">
+                {item.images.length > 0 && (
+                  <img
+                    src={`data:${item.images[0].contentType};${item.images[0].data[0]}`}
+                    alt={item.title}
+                    className="h-full w-full object-cover"
+                  />
+                )}
+                <div className="to-bg-black-10 absolute inset-0 w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
+              </div>
+              {/* Add other CardHeader content */}
+            </CardHeader>
+            <CardBody>
+              <div className="mb-3 flex items-center justify-between">
+                <Typography
+                  variant="h5"
+                  color="blue-gray"
+                  className="font-medium truncate w-36"
                 >
-                  {/* Rating SVG */}
-                </svg>
-                {/* Use item.rating or any other property */}
+                  {item.unitType}
+                </Typography>
+                <Typography
+                  color="blue-gray"
+                  className="flex items-center gap-1.5 font-normal"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="-mt-0.5 h-5 w-5 text-yellow-700"
+                  >
+                    {/* Rating SVG */}
+                  </svg>
+                  {/* Use item.rating or any other property */}
+                </Typography>
+              </div>
+              <Typography color="gray" className="truncate">
+                {item.street}, {item.streetNumber}, {item.city} - {item.zipcode}
               </Typography>
-            </div>
-            <Typography color="gray" className="truncate">
-              {item.street}, {item.streetNumber}, {item.city} - {item.zipcode}
-            </Typography>
-            {/* Add other CardBody content */}
-          </CardBody>
-          <CardFooter className="pt-3">
-            <Button size="sm" fullWidth={true} className="bg-orange-900">
-              Reserve
-            </Button>
-          </CardFooter>
-        </Card>
+              {/* Add other CardBody content */}
+            </CardBody>
+            <CardFooter className="pt-3">
+              <Button size="sm" fullWidth={true} className="bg-orange-900">
+                Reserve
+              </Button>
+            </CardFooter>
+          </Card>
+        </Link>
       ))}
     </div>
   );

@@ -431,21 +431,26 @@ const newListing = () => {
             </div>
           </div>
           <div className="bilder">
-            <h4>Ladda upp bilder</h4>
+            <h4 className="font-bold text-lg mx-4 my-2">Ladda upp bilder</h4>
             <input
+              className="mx-4"
               type="file"
               multiple
               accept="image/jpeg, image/png, image/jpg"
               onChange={handleImageChange}
             />
-            {selectedImages && (
-              <img src={selectedImages} alt="Selected" width="100" />
-            )}
+            <div className="flex justify-center mx-4">
+              {selectedImages.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Selected ${index + 1}`}
+                  width="100"
+                />
+              ))}
+            </div>
           </div>
-          <div
-            className="flex justify-between px-4
-                 py-3"
-          >
+          <div className="flex justify-between px-4 py-3 mt-6">
             <button
               className="underline font-bold"
               onClick={() => clearFilters()}

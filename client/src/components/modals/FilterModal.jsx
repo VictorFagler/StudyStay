@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { BsFilterLeft } from "react-icons/Bs";
+import { BsFilterLeft, BsFilterRight } from "react-icons/Bs";
 
 const FilterModal = () => {
   const [minAmount, setMinAmount] = useState("");

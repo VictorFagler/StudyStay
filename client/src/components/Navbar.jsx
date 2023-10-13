@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { AiOutlineMenu } from "react-icons/ai";
-// import { BsHouseDoor } from "react-icons/bs";
 import { UserContext } from "../../context/userContext";
 import axios from "axios";
 
@@ -59,7 +58,7 @@ export const Navbar = () => {
       <div className="flex justify between items-center text-black py-5 px-8">
         <div className="flex items-center">
           <Link to="/" className="absolute">
-            <img src="studystay-logo.png" alt="Logo" className="scale-75" />
+            <img src="/studystay-logo.png" alt="Logo" className="scale-75" />
           </Link>
         </div>
         <div className="lg:hidden mt-2">
