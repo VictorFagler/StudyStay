@@ -14,17 +14,14 @@ export default function HouseCard() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Make the API request
-    fetch("https://dummyjson.com/products?&limit=10")
+    // Make an API request to fetch your MongoDB data
+    fetch("http://localhost:5000/listings") // Replace with your API endpoint
       .then((res) => res.json())
-      .then((responseData) => {
-        if (Array.isArray(responseData.products)) {
-          setData(responseData.products);
+      .then((res) => {
+        if (Array.isArray(res)) {
+          setData(res);
         } else {
-          console.error(
-            "API did not return an array of products:",
-            responseData
-          );
+          console.error("API did not return an array of data:", res);
         }
       })
       .catch((error) => {
@@ -38,11 +35,13 @@ export default function HouseCard() {
         <Card key={index} className="max-w-[20rem] shadow-lg max-h-[24rem]">
           <CardHeader floated={false} color="blue-gray">
             <div className="relative h-44 w-full">
-              <img
-                src={item.thumbnail}
-                alt={item.title}
-                className="h-full w-full object-cover"
-              />
+              {item.images.length > 0 && (
+                <img
+                  src={`data:${item.images[0].contentType};${item.images[0].data[0]}`}
+                  alt={item.title}
+                  className="h-full w-full object-cover"
+                />
+              )}
               <div className="to-bg-black-10 absolute inset-0 w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
             </div>
             {/* Add other CardHeader content */}
@@ -54,13 +53,12 @@ export default function HouseCard() {
                 color="blue-gray"
                 className="font-medium truncate w-36"
               >
-                {item.title}
+                {item.unitType}
               </Typography>
               <Typography
                 color="blue-gray"
                 className="flex items-center gap-1.5 font-normal"
               >
-                {/* Use item.rating or any other property */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -69,11 +67,11 @@ export default function HouseCard() {
                 >
                   {/* Rating SVG */}
                 </svg>
-                {item.rating}
+                {/* Use item.rating or any other property */}
               </Typography>
             </div>
             <Typography color="gray" className="truncate">
-              {item.description}
+              {item.street}, {item.streetNumber}, {item.city} - {item.zipcode}
             </Typography>
             {/* Add other CardBody content */}
           </CardBody>

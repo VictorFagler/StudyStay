@@ -15,6 +15,65 @@ const newListing = () => {
   const [streetNumber, setstreetNumber] = useState();
   const [city, setcity] = useState();
   const [zipcode, setzipcode] = useState();
+  const [selectedImages, setselectedImages] = useState([]);
+
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    const imagesArray = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        // Read the image data URL
+        const imageBase64 = event.target.result;
+
+        // Resize the image before setting it in state
+        const maxWidth = 800;
+        const maxHeight = 600;
+
+        const img = new Image();
+        img.onload = function () {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            const aspectRatio = width / height;
+
+            if (width > maxWidth) {
+              width = maxWidth;
+              height = width / aspectRatio;
+            }
+
+            if (height > maxHeight) {
+              height = maxHeight;
+              width = height * aspectRatio;
+            }
+          }
+
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob((blob) => {
+            // Convert the resized image to base64
+            const resizedBase64Image = canvas.toDataURL("image/jpeg");
+            imagesArray.push(resizedBase64Image);
+
+            // If all images are processed, update the state
+            if (imagesArray.length === files.length) {
+              setselectedImages(imagesArray);
+            }
+          }, "image/jpeg");
+        };
+        img.src = imageBase64;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,27 +85,23 @@ const newListing = () => {
     if (!street) {
       missingFields.push("Gata");
     }
-    if (!streetNumber) {
-      missingFields.push("Gatunummer");
-    }
-    if (!city) {
-      missingFields.push("Stad");
-    }
-    if (!zipcode) {
-      missingFields.push("Postnummer");
-    }
+    // if (!streetNumber) {
+    //   missingFields.push("Gatunummer");
+    // }
+    // if (!city) {
+    //   missingFields.push("Stad");
+    // }
+    // if (!zipcode) {
+    //   missingFields.push("Postnummer");
+    // }
     if (missingFields.length > 0) {
       const missingFieldNames = missingFields.join(", ");
       toast.error(`Fält saknas: ${missingFieldNames}`);
-      return; // Do not proceed with the request
+      return;
     }
 
     if (isFormSubmitted)
       try {
-        console.log("Data to be sent:", {
-          unitType,
-          street,
-        });
         const { data } = await axios.post(
           "/listings",
           {
@@ -55,16 +110,15 @@ const newListing = () => {
             streetNumber,
             city,
             zipcode,
-            // minAmount,
+            image: selectedImages,
           },
           { withCredentials: true }
         );
         if (data.error) {
           toast.error(data.error);
         } else {
-          // Reset the unitType and other form values if necessary
           setUnitType("Lägenhet");
-          // ... Reset other form values here
+
           toast.success("Listing created");
         }
       } catch (error) {
@@ -93,6 +147,8 @@ const newListing = () => {
     setAmenities([]);
     setUnitType("Lägenhet"); // Reset the unit type to a default value
   };
+
+  /////////////////////////////// RETURN /////////////////////////////
 
   return (
     <React.Fragment>
@@ -164,14 +220,13 @@ const newListing = () => {
                 placeholder="Strandvägen"
                 onChange={(e) => {
                   setStreet(e.target.value);
-                  console.log(street); // Add this line to debug
                 }}
               />
 
               <p className="text-sm">Nummer</p>
               <input
                 className="border-2 rounded px-2 py-1 w-full"
-                type="string, number"
+                type="text"
                 id="streetNumber"
                 name="streetNumber"
                 value={streetNumber}
@@ -377,8 +432,15 @@ const newListing = () => {
           </div>
           <div className="bilder">
             <h4>Ladda upp bilder</h4>
-            <input type="file" accept="image/jpeg, image/png, image/jpg" />
-            <output></output>
+            <input
+              type="file"
+              multiple
+              accept="image/jpeg, image/png, image/jpg"
+              onChange={handleImageChange}
+            />
+            {selectedImages && (
+              <img src={selectedImages} alt="Selected" width="100" />
+            )}
           </div>
           <div
             className="flex justify-between px-4

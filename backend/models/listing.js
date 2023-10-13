@@ -11,8 +11,8 @@ const listingSchema = new Schema({
     required: true,
   },
   streetNumber: {
-    type: Number,
-    required: true,
+    type: String,
+    // required: true,
   },
   //   description: {
   //     type: String,
@@ -20,11 +20,11 @@ const listingSchema = new Schema({
   //   },
   city: {
     type: String,
-    required: true,
+    // required: true,
   },
   zipcode: {
     type: Number,
-    required: true,
+    // required: true,
   },
   //   price: {
   //     type: Number,
@@ -48,6 +48,12 @@ const listingSchema = new Schema({
   //     },
   //     required: true,
   //   },
+  images: [
+    {
+      data:  [String, String] , // Store image data as a Buffer
+      contentType: String, // Define the content type (e.g., "image/jpeg", "image/png")
+    },
+  ],
 });
 
 const ListingModel = mongoose.model("Listing", listingSchema);

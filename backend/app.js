@@ -4,6 +4,9 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const listingRoutes = require("./routes/listingRoutes");
 const authRoutes = require("./routes/authRoutes");
+const bodyParser = require("body-parser");
+
+
 
 app.use(
   cors({
@@ -13,7 +16,10 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
+app.use(
+  express.urlencoded({ limit: "50mb", extended: false, parameterLimit: 50000 })
+);
 app.use(express.json());
 app.use(cookieParser());
 
