@@ -1,15 +1,27 @@
 const ListingModel = require("../models/listing");
-
 // Create a new listing
 const createListing = async (req, res) => {
   try {
-    const { unitType, street, streetNumber, city, zipcode, image } = req.body;
+    const {
+      unitType,
+      street,
+      streetNumber,
+      city,
+      zipcode,
+      price,
+      rooms,
+      floor,
+      date,
+      size,
+      amenities,
+      image,
+    } = req.body;
 
     // Input validation
     if (!unitType || !street) {
       return res.status(400).json({ error: "All fields are required." });
     }
-
+    const amenitiesAsString = amenities.join(", ");
     // Create a new listing in the database
     const newListing = await ListingModel.create({
       unitType,
@@ -17,6 +29,12 @@ const createListing = async (req, res) => {
       streetNumber,
       city,
       zipcode,
+      price,
+      rooms,
+      floor,
+      date,
+      size,
+      amenities: amenitiesAsString,
       images: [
         {
           data: image, // Use req.body.image to access the image data
@@ -46,8 +64,23 @@ const getListings = async (req, res) => {
       .json({ error: "An error occurred while fetching listings." });
   }
 };
+const getOneListing = async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const item = await ListingModel.findOne({ _id: itemId });
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    res.json(item);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
+  getOneListing,
   createListing,
   getListings,
 };

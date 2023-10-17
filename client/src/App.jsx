@@ -18,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="main-content">
+      <div className="main-content min-h-[100vh] mb-6">
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
           <Route path="/" index element={<IndexPage />} />

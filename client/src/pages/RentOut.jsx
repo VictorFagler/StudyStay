@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const newListing = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [minAmount, setMinAmount] = useState("");
-  // const [maxAmount, setMaxAmount] = useState("");
-  const [numRooms, setNumRooms] = useState("");
+  const [date, setDate] = useState("");
+  const [rooms, setRooms] = useState("");
   const [numBathrooms, setNumBathrooms] = useState("");
-  const [numFloors, setNumFloors] = useState("");
+  const [floor, setFloor] = useState("");
   const [unitType, setUnitType] = useState("Lägenhet");
   const [amenities, setAmenities] = useState([]);
   const [street, setStreet] = useState("");
@@ -16,6 +18,9 @@ const newListing = () => {
   const [city, setcity] = useState();
   const [zipcode, setzipcode] = useState();
   const [selectedImages, setselectedImages] = useState([]);
+  const [price, setPrice] = useState(""); // Add price state
+  const [size, setSize] = useState(""); // Add price state
+  const [description, setDescription] = useState(""); // Add description state
 
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -110,6 +115,13 @@ const newListing = () => {
             streetNumber,
             city,
             zipcode,
+            price,
+            rooms,
+            floor,
+            date,
+            size,
+            amenities,
+            description,
             image: selectedImages,
           },
           { withCredentials: true }
@@ -141,7 +153,6 @@ const newListing = () => {
 
   const clearFilters = () => {
     setMinAmount("");
-    setMaxAmount("");
     setNumRooms("");
     setNumBathrooms("");
     setAmenities([]);
@@ -152,7 +163,7 @@ const newListing = () => {
 
   return (
     <React.Fragment>
-      <div className="bg-white rounded-3xl md:max-w-6xl mx-auto">
+      <div className="bg-white rounded-3xl md:max-w-2xl mx-auto">
         <div className="relative border-b-2 border-gray-300 py-2 center">
           <h2 className="text-2xl text-center">Hyr ut</h2>
         </div>
@@ -257,30 +268,42 @@ const newListing = () => {
               />
             </div>
           </div>
-          <div className="minmax flex flex-col px-4 py-4 border-b-2 border-gray-300">
+          <div className="w-64 minmax flex flex-col px-4 py-4 border-b-2 border-gray-300">
             <div>
               <h4 className="font-bold text-lg ">Pris</h4>
             </div>
             <p className="text-sm">Månadshyra</p>
-            <div className="flex flex-col justify-center my-2">
+            <div className="flex flex-col  my-2">
               <input
                 className="border-2 rounded px-2 py-1"
                 type="number"
-                id="minAmount"
-                name="minAmount"
-                value={minAmount}
+                id="price"
+                name="price"
+                value={price}
                 placeholder="Kr 3000"
-                onChange={(e) => setMinAmount(e.target.value)}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <p className="text-sm">Kvadratmeter</p>
+
+              <input
+                className="border-2 rounded px-2 py-1"
+                type="number"
+                id="size"
+                name="size"
+                value={size}
+                placeholder="34"
+                onChange={(e) => setSize(e.target.value)}
               />
               <p className="text-sm">Uthyrningsperiod</p>
-              <input
-                className="border-2 rounded px-2 py-1"
-                type="number"
-                id="minAmount"
-                name="minAmount"
-                value={minAmount}
-                placeholder="Jan - Dec"
-                onChange={(e) => setMinAmount(e.target.value)}
+              <DatePicker
+                selected={date}
+                onChange={(date) => setDate(date)}
+                dateFormat="dd/MM/yyyy"
+                showDayMonthYearPicker
+                placeholderText="DD / MM / YYYY"
+                id="rentalPeriod"
+                name="rentalPeriod"
+                className="border-2 rounded px-2 py-1 w-56"
               />
             </div>
           </div>
@@ -288,7 +311,13 @@ const newListing = () => {
             <div>
               <h4 className="font-bold text-lg ">Beskrvining</h4>
             </div>
-            <textarea className="text-sm w-full h-40 border"></textarea>
+            <textarea
+              className="border-2 rounded px-2 py-1"
+              id="description"
+              name="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
             <div className="flex flex-col justify-center my-2"></div>
           </div>
           <div className="border-b-2 border-gray-300">
@@ -300,9 +329,9 @@ const newListing = () => {
                   <button
                     key={index}
                     className={`room-button ${
-                      numRooms === index + 1 ? "selected" : ""
+                      rooms === index + 1 ? "selected" : ""
                     } px-5 py-1 mr-1 mb-1 rounded-xl border border-gray-300 min-w-[60px] h-[35px] w-[68px]`}
-                    onClick={() => setNumRooms(index + 1)}
+                    onClick={() => setRooms(index + 1)}
                   >
                     {index + 1}
                   </button>
@@ -329,9 +358,9 @@ const newListing = () => {
                   <button
                     key={index}
                     className={`floor-button ${
-                      numFloors === index + 1 ? "selected" : ""
+                      floor === index + 1 ? "selected" : ""
                     } px-5 py-1 mr-1 mb-1 rounded-xl border border-gray-300 min-w-[60px] h-[35px] w-[68px]`}
-                    onClick={() => setNumFloors(index + 1)}
+                    onClick={() => setFloor(index + 1)}
                   >
                     {index + 1}
                   </button>
@@ -371,8 +400,8 @@ const newListing = () => {
                   <input
                     className="w-4 h-4 mr-2"
                     type="checkbox"
-                    value="Tväggstuga/tvättmaskin"
-                    checked={amenities.includes("Tväggstuga/tvättmaskin")}
+                    value="Tvättmaskin"
+                    checked={amenities.includes("Tvättmaskin")}
                     onChange={handleAmenitiesChange}
                   />
                   Tvättmaskin
@@ -381,8 +410,8 @@ const newListing = () => {
                   <input
                     className="w-4 h-4 mr-2"
                     type="checkbox"
-                    value="Tv"
-                    checked={amenities.includes("Tv")}
+                    value="TV"
+                    checked={amenities.includes("TV")}
                     onChange={handleAmenitiesChange}
                   />
                   Tv
