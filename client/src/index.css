@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,13 +7,23 @@
 :root {
   margin: 0;
   padding: 0;
-  font-family: montserrat;
 }
 body {
   margin: 0;
   padding: 0;
   max-width: 100vh;
   min-width: 100%;
+}
+p {
+  font-family: Kumbh Sans;
+  font-size: 1rem;
+}
+.subtitle {
+  style: italic;
+}
+
+h1 {
+  font-size: 4.1rem;
 }
 
 .selected {

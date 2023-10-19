@@ -9,7 +9,7 @@ import {
 import { GiWashingMachine } from "react-icons/Gi";
 import { BsPersonWorkspace } from "react-icons/Bs";
 import { MdBalcony } from "react-icons/Md";
-import { AiFillStar } from "react-icons/Ai";
+// import { AiFillStar } from "react-icons/Ai";
 
 const ListingDetails = () => {
   const { id } = useParams(); // Get the ID from the URL
@@ -73,12 +73,12 @@ const ListingDetails = () => {
   return (
     <>
       <div className="container w-11/12 mx-auto">
-        <div className="firstFourImages flex w-10/12 h-full mx-auto justify-center items-center">
+        <div className="firstFourImages flex w-10/12 h-full mx-auto items-center">
           <div className="flex flex-row">
             {firstFourImages.slice(0, 2).map((imageData, index) => (
-              <div key={index} className="w-full h-full">
+              <div key={index} className="object-cover">
                 <img
-                  className="p-1 fill rounded-2xl"
+                  className="p-1 rounded-2xl"
                   src={`data:${item.images[0].contentType};${imageData}`}
                   alt={`Image`}
                 />
@@ -89,7 +89,7 @@ const ListingDetails = () => {
             {firstFourImages.slice(2, 4).map((imageData, index) => (
               <div key={index}>
                 <img
-                  className="p-1 fill max-w-full max-h-full rounded-xl"
+                  className="p-1 rounded-xl"
                   src={`data:${item.images[0].contentType};${imageData}`}
                   alt={`img`}
                 />
@@ -133,7 +133,7 @@ const ListingDetails = () => {
             {restOfImages.map((imageData, index) => (
               <div key={index} className="flex m-1 px-2">
                 <img
-                  className="flex fill cursor-pointer rounded-xl"
+                  className="flex cursor-pointer rounded-xl"
                   src={`data:${item.images[0].contentType};${imageData}`}
                   alt={"img"}
                 />
@@ -197,7 +197,7 @@ const ListingDetails = () => {
           <div className="quickinfo flex flex-col flex-end w-4/12 max-w-[300px]">
             <img src="/studystay-logo.png" alt="Logo-img" />
             <div className="flex flex-col bg-blue-gray-200 p-6">
-              <h1 className="font-bold">Översikt</h1>
+              <h2 className="font-bold">Översikt</h2>
               <p>Område:</p>
               <p className="flex justify-between">
                 Våning: <span>{item.floor}</span>
@@ -211,11 +211,11 @@ const ListingDetails = () => {
               <p className="flex flex-row justify-between">
                 Hyresvärd:
                 <span className="flex flex-row">
+                  {/* <AiFillStar className="fill-orange-800" />
                   <AiFillStar className="fill-orange-800" />
                   <AiFillStar className="fill-orange-800" />
                   <AiFillStar className="fill-orange-800" />
-                  <AiFillStar className="fill-orange-800" />
-                  <AiFillStar className="fill-orange-800" />
+                  <AiFillStar className="fill-orange-800" /> */}
                 </span>
               </p>
               <p className="py-4">

@@ -40,7 +40,7 @@ export default function RegisterForm() {
     <div>
       <div className="flex w-500 bg-blue-gray-100 flex-col">
         <h1>User Registration</h1>
-        <form onSubmit={registerUser} className="">
+        <form id="registerform" onSubmit={registerUser} className="">
           <div className="flex flex-col">
             <label>Name</label>
             <input

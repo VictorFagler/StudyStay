@@ -31,7 +31,7 @@ export default function LoginForm() {
   return (
     <>
       <div className="flex flex-col">
-        <form onSubmit={loginUser}>
+        <form id="loginform" onSubmit={loginUser}>
           <label>Email</label>
           <input
             className="flex"

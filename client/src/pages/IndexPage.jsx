@@ -1,18 +1,18 @@
-import { React, useEffect, useState } from "react";
-// import HouseCard from "../components/HouseCard";
+import React, { useEffect, useState } from "react";
 import Filter from "../components/Filter.jsx";
 import { Link } from "react-router-dom";
 
 const IndexPage = () => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    // Make an API request to fetch your MongoDB data
-    fetch("http://localhost:5000/listings") // Replace with your API endpoint
+    fetch("http://localhost:5000/listings")
       .then((res) => res.json())
       .then((res) => {
         if (Array.isArray(res)) {
           setData(res);
+          setFilteredData(res);
         } else {
           console.error("API did not return an array of data:", res);
         }
@@ -21,6 +21,33 @@ const IndexPage = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+
+  // Define a function to filter data based on criteria
+  const filterData = (filterCriteria) => {
+    // Apply your filtering logic here using filterCriteria
+    const filtered = data.filter((item) => {
+      // Implement your filtering logic based on filterCriteria
+      return (
+        (!filterCriteria.minAmount || item.price >= filterCriteria.minAmount) &&
+        (!filterCriteria.maxAmount || item.price <= filterCriteria.maxAmount) &&
+        (!filterCriteria.numRooms || item.rooms === filterCriteria.numRooms) &&
+        (!filterCriteria.unitType ||
+          item.unitType === filterCriteria.unitType) &&
+        (!filterCriteria.amenities.length === 0 ||
+          filterCriteria.amenities.every((amenity) =>
+            item.amenities.includes(amenity)
+          )) &&
+        (!filterCriteria.searchText ||
+          item.street
+            .toLowerCase()
+            .includes(filterCriteria.searchText.toLowerCase()) ||
+          item.city
+            .toLowerCase()
+            .includes(filterCriteria.searchText.toLowerCase()))
+      );
+    });
+    setFilteredData(filtered);
+  };
 
   return (
     <>
@@ -32,7 +59,7 @@ const IndexPage = () => {
             className="w-full md:max-h-[40em]"
           />
           <div className="around absolute inset-0 flex flex-col items-center justify-center text-center">
-            <h2 className="text-4xl sm:text-4xl text-brown-50 drop-shadow lg:text-6xl ">
+            <h2 className="text-4xl sm:text-4xl text-brown-50 drop-shadow lg:text-6xl">
               Hitta din nya studentbostad
             </h2>
             <button className="lg:text-1xl lg:mt-20 px-4 py-1 mt-8 mb-1 rounded-lg text-brown-50 bg-orange-900 drop-shadow-2xl hover:bg-orange-900">
@@ -41,11 +68,11 @@ const IndexPage = () => {
           </div>
         </div>
         <div>
-          <Filter />
+          <Filter onFilter={filterData} />
         </div>
         <div className="">
           <div className="flex flex-wrap w-30 h-30 justify-center m-4">
-            {data.map((item, index) => (
+            {filteredData.map((item, index) => (
               <Link key={index} to={`/listings/${item._id}`}>
                 <div key={index} className="w-[18rem] h-[26rem] m-4">
                   <div className=" h-[12rem] w-full">

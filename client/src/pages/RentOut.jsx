@@ -4,7 +4,6 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 const newListing = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [date, setDate] = useState("");
@@ -465,7 +464,7 @@ const newListing = () => {
               className="mx-4"
               type="file"
               multiple
-              accept="image/jpeg, image/png, image/jpg"
+              accept="image/jpeg, image/png, image/jpg, image/avif"
               onChange={handleImageChange}
             />
             <div className="flex justify-center mx-4">
