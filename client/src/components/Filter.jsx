@@ -55,7 +55,7 @@ const Filter = ({ onFilter, handleFilter }) => {
   };
 
   return (
-    <div className="flex flex-row justify-between mx-8 mt-6 md:max-w-lg md:mx-auto">
+    <div className="flex flex-row w-6/12 mx-auto mt-6">
       <button
         onClick={() => {
           if (unitType === "Hus") {
@@ -72,7 +72,7 @@ const Filter = ({ onFilter, handleFilter }) => {
             });
           }
         }}
-        className={`flex flex-col items-center text-center px-2 py-1 ${
+        className={`flex flex-col items-center text-center py-1 w-1/5 ${
           unitType === "Hus" ? "selected rounded-xl" : ""
         }`}
       >
@@ -95,7 +95,7 @@ const Filter = ({ onFilter, handleFilter }) => {
             });
           }
         }}
-        className={`flex flex-col items-center text-center px-2 py-1  ${
+        className={`flex flex-col items-center text-center px-2 py-1  w-1/5 ${
           unitType === "Lägenhet" ? "selected rounded-xl" : ""
         }`}
       >
@@ -118,7 +118,7 @@ const Filter = ({ onFilter, handleFilter }) => {
             });
           }
         }}
-        className={`flex flex-col items-center text-center px-2 py-1  ${
+        className={`flex flex-col items-center text-center px-2 py-1 w-1/5 ${
           unitType === "Rum" ? "selected rounded-xl" : ""
         }`}
       >
@@ -141,7 +141,7 @@ const Filter = ({ onFilter, handleFilter }) => {
             });
           }
         }}
-        className={`flex flex-col items-center text-center px-2 py-1  ${
+        className={`flex flex-col items-center text-center px-2 py-1 w-1/5 ${
           unitType === "Kollektiv" ? "selected rounded-xl" : ""
         }`}
       >
@@ -150,7 +150,7 @@ const Filter = ({ onFilter, handleFilter }) => {
       </button>
       <Button
         onClick={handleShow}
-        className="flex flex-col items-center text-center px-2 py-1 "
+        className="flex flex-col items-center text-center px-2 py-1 w-1/5 "
       >
         <BsFilterLeft size={32} />
         <p className="text-xs py-1">Filter</p>

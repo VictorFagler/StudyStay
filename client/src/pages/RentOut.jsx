@@ -13,9 +13,10 @@ const newListing = () => {
   const [unitType, setUnitType] = useState("Lägenhet");
   const [amenities, setAmenities] = useState([]);
   const [street, setStreet] = useState("");
-  const [streetNumber, setstreetNumber] = useState();
-  const [city, setcity] = useState();
-  const [zipcode, setzipcode] = useState();
+  const [streetNumber, setstreetNumber] = useState("");
+  const [city, setcity] = useState("");
+  const [area, setArea] = useState("");
+  const [zipcode, setzipcode] = useState("");
   const [selectedImages, setselectedImages] = useState([]);
   const [price, setPrice] = useState(""); // Add price state
   const [size, setSize] = useState(""); // Add price state
@@ -113,6 +114,7 @@ const newListing = () => {
             street,
             streetNumber,
             city,
+            area,
             zipcode,
             price,
             rooms,
@@ -128,8 +130,7 @@ const newListing = () => {
         if (data.error) {
           toast.error(data.error);
         } else {
-          setUnitType("Lägenhet");
-
+          clearFilters();
           toast.success("Listing created");
         }
       } catch (error) {
@@ -150,12 +151,22 @@ const newListing = () => {
     setIsFormSubmitted(true);
   };
 
-  const clearFilters = () => {
-    setMinAmount("");
-    setNumRooms("");
+  const clearFilters = (e) => {
+    setUnitType("Lägenhet");
+    setStreet("");
+    setstreetNumber("");
+    setcity("");
+    setArea("");
+    setzipcode("");
+    setPrice("");
+    setRooms("");
     setNumBathrooms("");
+    setFloor("");
+    setDate("");
+    setSize("");
     setAmenities([]);
-    setUnitType("Lägenhet"); // Reset the unit type to a default value
+    setDescription("");
+    setselectedImages([]);
   };
 
   /////////////////////////////// RETURN /////////////////////////////
@@ -253,6 +264,16 @@ const newListing = () => {
                 value={city}
                 placeholder="Stockholm"
                 onChange={(e) => setcity(e.target.value)}
+              />
+              <p className="text-sm">Ort</p>
+              <input
+                className="border-2 rounded px-2 py-1 w-full"
+                type="string"
+                id="area"
+                name="area"
+                value={area}
+                placeholder="Nacka"
+                onChange={(e) => setArea(e.target.value)}
               />
 
               <p className="text-sm">Postnummer</p>
@@ -467,13 +488,13 @@ const newListing = () => {
               accept="image/jpeg, image/png, image/jpg, image/avif"
               onChange={handleImageChange}
             />
-            <div className="flex justify-center mx-4">
+            <div className="flex flex-wrap justify-center mx-auto ">
               {selectedImages.map((image, index) => (
                 <img
+                  className="w-32 h-32 border rounded-xl m-1"
                   key={index}
                   src={image}
                   alt={`Selected ${index + 1}`}
-                  width="100"
                 />
               ))}
             </div>
@@ -486,7 +507,7 @@ const newListing = () => {
               Rensa alla
             </button>
             <button
-              onClick={handleListBoendeClick}
+              onClick={() => handleListBoendeClick()}
               type="submit"
               className="bg-orange-600 rounded-xl px-4 py-0.5 flex justify-center text-white"
             >

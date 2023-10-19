@@ -1,32 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Filter from "../components/Filter.jsx";
 import { Link } from "react-router-dom";
+import { useData } from "../context/DataContext.jsx";
 
 const IndexPage = () => {
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const { data, filteredData, setData, setFilteredData } = useData();
 
-  useEffect(() => {
-    fetch("http://localhost:5000/listings")
-      .then((res) => res.json())
-      .then((res) => {
-        if (Array.isArray(res)) {
-          setData(res);
-          setFilteredData(res);
-        } else {
-          console.error("API did not return an array of data:", res);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
-  // Define a function to filter data based on criteria
   const filterData = (filterCriteria) => {
-    // Apply your filtering logic here using filterCriteria
     const filtered = data.filter((item) => {
-      // Implement your filtering logic based on filterCriteria
       return (
         (!filterCriteria.minAmount || item.price >= filterCriteria.minAmount) &&
         (!filterCriteria.maxAmount || item.price <= filterCriteria.maxAmount) &&
@@ -70,33 +51,32 @@ const IndexPage = () => {
         <div>
           <Filter onFilter={filterData} />
         </div>
-        <div className="">
-          <div className="flex flex-wrap w-30 h-30 justify-center m-4">
-            {filteredData.map((item, index) => (
-              <Link key={index} to={`/listings/${item._id}`}>
-                <div key={index} className="w-[18rem] h-[26rem] m-4">
-                  <div className=" h-[12rem] w-full">
-                    {item.images.length > 0 && (
-                      <img
-                        src={`data:${item.images[0].contentType};${item.images[0].data[0]}`}
-                        alt={item.title}
-                        className="h-full w-full object-cover rounded-xl"
-                      />
-                    )}
-                  </div>
-                  <div className="flex justify-between font-bold ">
-                    {item.street} {item.streetNumber} <span>{item.city}</span>
-                  </div>
-                  <div className="flex justify-between my-2">
-                    {item.price} kr/mån <span>BRF</span>
-                  </div>
-                  <div className="flex justify-between">
-                    {item.rooms} RoK <span>{item.size}m² </span>
-                  </div>
+
+        <div className="flex flex-wrap w-30 h-30 justify-center m-4 w-7/12 mx-auto">
+          {filteredData.map((item, index) => (
+            <Link key={index} to={`/listings/${item._id}`}>
+              <div key={index} className="w-[14rem] m-4">
+                <div className="h-[14rem]">
+                  {item.images.length > 0 && (
+                    <img
+                      src={`data:${item.images[0].contentType};${item.images[0].data[0]}`}
+                      alt={item.title}
+                      className="h-full w-full object-cover rounded-xl"
+                    />
+                  )}
                 </div>
-              </Link>
-            ))}
-          </div>
+                <div className="flex justify-between font-bold">
+                  {item.street} {item.streetNumber} <span>{item.area}</span>
+                </div>
+                <div className="flex justify-between my-2">
+                  {item.price} kr/mån <span>BRF</span>
+                </div>
+                <div className="flex justify-between">
+                  {item.rooms} RoK <span>{item.size}m² </span>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </>

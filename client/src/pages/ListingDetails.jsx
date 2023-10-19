@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { BiWifi, BiSolidParking } from "react-icons/Bi";
+import { BiWifi, BiSolidParking, BiMap } from "react-icons/Bi";
 import {
   PiCookingPot,
   PiTelevisionSimpleBold,
   PiElevatorDuotone,
 } from "react-icons/Pi";
 import { GiWashingMachine } from "react-icons/Gi";
-import { BsPersonWorkspace } from "react-icons/Bs";
+import { BsPersonWorkspace, BsBuildings } from "react-icons/Bs";
 import { MdBalcony } from "react-icons/Md";
-// import { AiFillStar } from "react-icons/Ai";
+import { GrMoney } from "react-icons/Gr";
+import { IoTodayOutline, IoBedOutline } from "react-icons/Io5";
+import { LuBox } from "react-icons/Lu";
 
 const ListingDetails = () => {
   const { id } = useParams(); // Get the ID from the URL
@@ -72,24 +74,24 @@ const ListingDetails = () => {
   };
   return (
     <>
-      <div className="container w-11/12 mx-auto">
-        <div className="firstFourImages flex w-10/12 h-full mx-auto items-center">
-          <div className="flex flex-row">
+      <div className="container w-11/12 mx-auto mt-6">
+        <div className="firstFourImages flex h-[600px] mx-auto items-center">
+          <div className="flex flex-row w-2/3 h-full">
             {firstFourImages.slice(0, 2).map((imageData, index) => (
-              <div key={index} className="object-cover">
+              <div key={index} className="w-full h-full">
                 <img
-                  className="p-1 rounded-2xl"
+                  className="p-1 rounded-2xl object-cover h-full w-full"
                   src={`data:${item.images[0].contentType};${imageData}`}
                   alt={`Image`}
                 />
               </div>
             ))}
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-1/3 h-full">
             {firstFourImages.slice(2, 4).map((imageData, index) => (
-              <div key={index}>
+              <div key={index} className="p-1 h-1/2">
                 <img
-                  className="p-1 rounded-xl"
+                  className="rounded-xl object-cover h-full w-full"
                   src={`data:${item.images[0].contentType};${imageData}`}
                   alt={`img`}
                 />
@@ -98,52 +100,47 @@ const ListingDetails = () => {
           </div>
         </div>
 
-        <div className="housingDetails flex w-8/12 mx-auto justify-between my-6">
-          <div>
-            <p>Street</p>
-            <p>
-              {item.street} {item.streetNumber}
-            </p>
+        <div className="housingDetails flex w-8/12 mx-auto my-6 justify-center">
+          <div className="border-r-2 w-1/6 flex flex-col items-center">
+            <BiMap size={32} />
+            {item.street} {item.streetNumber}
           </div>
-          <div>
-            <p>Hyra</p>
-            <p>{item.price} kr/mån</p>
+          <div className="border-r-2 w-1/6 flex flex-col items-center">
+            <GrMoney size={32} />
+            <div>{item.price} kr/mån</div>
           </div>
-          <div>
-            <p>Rum</p>
-            <p>{item.rooms} rum</p>
+          <div className="border-r-2 w-1/6 flex flex-col items-center">
+            <IoBedOutline size={32} />
+            <div>{item.rooms} rum</div>
           </div>
-          <div>
-            <p>Kvadrat</p>
-            <p>{item.size} m²</p>
+          <div className="border-r-2 w-1/6 flex flex-col items-center">
+            <LuBox size={32} />
+            <div>{item.size} m²</div>
           </div>
-          <div>
-            <p>Datum</p>
-            <p>{formattedDate}</p>
+          <div className="border-r-2 w-1/6 flex flex-col items-center">
+            <IoTodayOutline size={32} />
+            <div>{formattedDate}</div>
           </div>
-          <div>
-            <p>Typ</p>
-            <p>{item.unitType}</p>
+          <div className="w-1/6 flex flex-col items-center">
+            <BsBuildings size={32} />
+            <div>{item.unitType}</div>
           </div>
         </div>
 
-        <div>
-          {/* <h2>Additional Images</h2> */}
-          <div className="AdditionImages flex w-10/12 mx-auto justify-center items-center">
-            {restOfImages.map((imageData, index) => (
-              <div key={index} className="flex m-1 px-2">
-                <img
-                  className="flex cursor-pointer rounded-xl"
-                  src={`data:${item.images[0].contentType};${imageData}`}
-                  alt={"img"}
-                />
-              </div>
-            ))}
-          </div>
+        <div className="AdditionImages flex h-[24em]">
+          {restOfImages.map((imageData, index) => (
+            <div key={index} className="flex h-full w-1/4 py-2 px-3">
+              <img
+                className="rounded-xl object-cover w-full h-full"
+                src={`data:${item.images[0].contentType};${imageData}`}
+                alt="img"
+              />
+            </div>
+          ))}
         </div>
 
         <div className=" mx-auto mt-8 flex justify-center">
-          <div className="w-7/12 flex-start pr-16">
+          <div className="w-full flex-start pr-16 mr-28">
             <h1 className="text-4xl">
               {item.street} {item.streetNumber}
             </h1>
@@ -194,11 +191,13 @@ const ListingDetails = () => {
 
           {/* QUICKINFO BOX */}
 
-          <div className="quickinfo flex flex-col flex-end w-4/12 max-w-[300px]">
+          <div className="quickinfo flex flex-col flex-end w-5/12">
             <img src="/studystay-logo.png" alt="Logo-img" />
             <div className="flex flex-col bg-blue-gray-200 p-6">
               <h2 className="font-bold">Översikt</h2>
-              <p>Område:</p>
+              <p className="flex justify-between">
+                Område: <span>{item.area}</span>
+              </p>
               <p className="flex justify-between">
                 Våning: <span>{item.floor}</span>
               </p>
@@ -210,13 +209,11 @@ const ListingDetails = () => {
               </p>
               <p className="flex flex-row justify-between">
                 Hyresvärd:
-                <span className="flex flex-row">
-                  {/* <AiFillStar className="fill-orange-800" />
-                  <AiFillStar className="fill-orange-800" />
-                  <AiFillStar className="fill-orange-800" />
-                  <AiFillStar className="fill-orange-800" />
-                  <AiFillStar className="fill-orange-800" /> */}
-                </span>
+                <span className="flex flex-row">Brf</span>
+              </p>
+              <p className="flex flex-row justify-between">
+                Betyg:
+                <span className="flex flex-row">-INSERT STARS-</span>
               </p>
               <p className="py-4">
                 Ansökan är öppen och görs via vår bostadskö.

@@ -148,6 +148,7 @@ export const Navbar = () => {
                         >
                           Logga ut
                         </button>
+                        <p className="text-xs pt-1">Inloggad som {user.name}</p>
                       </div>
                     ) : (
                       <Link to="/login">

@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import axios from "axios";
 import MyProfile from "./pages/MyProfile";
 import ListingDetails from "./pages/listingDetails";
+import { DataProvider } from "./context/DataContext";
 
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
@@ -19,19 +20,21 @@ function App() {
   return (
     <div className="App">
       <div className="main-content min-h-[100vh] mb-6">
-        <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
-        <Routes>
-          <Route path="/" index element={<IndexPage />} />
-          <Route path="/about" index element={<About />} />
-          <Route path="/rentout" index element={<RentOut />} />
-          <Route path="/register" index element={<Register />} />
-          <Route path="/login" index element={<Login />} />
-          <Route path="/profile" index element={<MyProfile />} />
-          <Route
-            path="/listings/:id"
-            element={<ListingDetails data={data} />} // Pass data as a prop
-          />
-        </Routes>
+        <DataProvider>
+          <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
+          <Routes>
+            <Route path="/" index element={<IndexPage />} />
+            <Route path="/about" index element={<About />} />
+            <Route path="/rentout" index element={<RentOut />} />
+            <Route path="/register" index element={<Register />} />
+            <Route path="/login" index element={<Login />} />
+            <Route path="/profile" index element={<MyProfile />} />
+            <Route
+              path="/listings/:id"
+              element={<ListingDetails data={data} />} // Pass data as a prop
+            />
+          </Routes>
+        </DataProvider>
       </div>
     </div>
   );
