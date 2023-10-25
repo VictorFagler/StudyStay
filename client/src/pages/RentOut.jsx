@@ -173,6 +173,13 @@ const newListing = () => {
 
   return (
     <React.Fragment>
+      <div className="w-full h-[26em]">
+        <img
+          src="loginpage.png"
+          alt="loginpage"
+          className="w-full h-full object-cover"
+        />
+      </div>
       <div className="bg-white rounded-3xl md:max-w-2xl mx-auto">
         <div className="relative border-b-2 border-gray-300 py-2 center">
           <h2 className="text-2xl text-center">Hyr ut</h2>

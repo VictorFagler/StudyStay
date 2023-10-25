@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { BiWifi, BiSolidParking, BiMap } from "react-icons/Bi";
 import {
   PiCookingPot,
@@ -218,9 +218,14 @@ const ListingDetails = () => {
               <p className="py-4">
                 Ansökan är öppen och görs via vår bostadskö.
               </p>
-              <button className="w-48 mx-auto uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl">
-                Till ansökan
-              </button>
+              <Link
+                to={`/application/${item._id}`}
+                state={{ item, formattedMoveInDate }}
+              >
+                <button className="w-48 mx-auto uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl">
+                  Till ansökan
+                </button>
+              </Link>
             </div>
 
             <div className="amentities flex flex-wrap justify-center w-full px-1 py-4">

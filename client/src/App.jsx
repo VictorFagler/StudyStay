@@ -8,8 +8,9 @@ import RentOut from "./pages/RentOut";
 import Register from "./pages/Register";
 import axios from "axios";
 import MyProfile from "./pages/MyProfile";
-import ListingDetails from "./pages/listingDetails";
+import ListingDetails from "./pages/ListingDetails";
 import { DataProvider } from "./context/DataContext";
+import ApplicationPage from "./pages/ApplicationPage";
 
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
@@ -30,9 +31,12 @@ function App() {
             <Route path="/login" index element={<Login />} />
             <Route path="/profile" index element={<MyProfile />} />
             <Route
-              path="/listings/:id"
-              element={<ListingDetails data={data} />} // Pass data as a prop
+              path="/application/:id"
+              index
+              
+              element={<ApplicationPage />}
             />
+            <Route path="/listings/:id" index element={<ListingDetails />} />
           </Routes>
         </DataProvider>
       </div>
