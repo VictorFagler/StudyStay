@@ -2,9 +2,38 @@ import React, { useEffect, useState } from "react";
 import Filter from "../components/Filter.jsx";
 import { Link } from "react-router-dom";
 import { useData } from "../context/DataContext.jsx";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 
 const IndexPage = () => {
   const { data, filteredData, setData, setFilteredData } = useData();
+  const [imageIndexes, setImageIndexes] = useState([]);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setImageIndexes(Array(filteredData.length).fill(0));
+    }
+  }, [data, filteredData]);
+
+  const showNextImage = (itemIndex) => {
+    setImageIndexes((prevIndexes) =>
+      prevIndexes.map((index, i) =>
+        i === itemIndex
+          ? (index + 1) % filteredData[itemIndex].images[0].data.length
+          : index
+      )
+    );
+  };
+
+  const showPrevImage = (itemIndex) => {
+    setImageIndexes((prevIndexes) =>
+      prevIndexes.map((index, i) =>
+        i === itemIndex
+          ? (index - 1 + filteredData[itemIndex].images[0].data.length) %
+            filteredData[itemIndex].images[0].data.length
+          : index
+      )
+    );
+  };
 
   const filterData = (filterCriteria) => {
     const filtered = data.filter((item) => {
@@ -52,19 +81,52 @@ const IndexPage = () => {
           <Filter onFilter={filterData} />
         </div>
 
-        <div className="flex flex-wrap w-30 h-30 justify-center m-4 w-7/12 mx-auto">
+        <div className="flex flex-wrap justify-center m-4 w-7/12 mx-auto">
           {filteredData.map((item, index) => (
-            <Link key={index} to={`/listings/${item._id}`}>
-              <div key={index} className="w-[14rem] m-4">
-                <div className="h-[14rem]">
-                  {item.images.length > 0 && (
-                    <img
-                      src={`data:${item.images[0].contentType};${item.images[0].data[0]}`}
-                      alt={item.title}
-                      className="h-full w-full object-cover rounded-xl"
-                    />
-                  )}
+            <div key={index} className="w-[14rem] m-4 relative ">
+              <div className="h-[14rem] relative group">
+                <button
+                  onClick={() => showPrevImage(index)}
+                  className="text-white z-50 absolute left-0 h-full bg-white bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  <ArrowBigLeft />
+                </button>
+                {item.images.length > 0 && (
+                  <img
+                    src={item.images[0].data[imageIndexes[index]]}
+                    alt={item.title}
+                    className="h-full w-full object-cover rounded-xl "
+                  />
+                )}
+                <button
+                  onClick={() => showNextImage(index)}
+                  className="text-white z-50 absolute top-1/2 transform -translate-y-1/2 right-0 h-full bg-white bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  <ArrowBigRight />
+                </button>
+                <div className="absolute flex items-center justify-center bottom-2 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {item.images[0].data.map((_, buttonIndex) => (
+                    <button
+                      key={buttonIndex}
+                      onClick={() => {
+                        const indexes = [...imageIndexes];
+                        indexes[index] = buttonIndex;
+                        setImageIndexes(indexes);
+                      }}
+                      className={`bg-gray-200 opacity-50 rounded-2xl w-2 h-2 mx-0.5 ${
+                        imageIndexes[index] === buttonIndex
+                          ? "bg-white-500 scale-150 opacity-100"
+                          : ""
+                      }`}
+                    ></button>
+                  ))}
                 </div>
+              </div>
+              <Link
+                key={index}
+                to={`/listings/${item._id}`}
+                className="relative z-10"
+              >
                 <div className="flex justify-between font-bold">
                   {item.street} {item.streetNumber} <span>{item.area}</span>
                 </div>
@@ -72,10 +134,10 @@ const IndexPage = () => {
                   {item.price} kr/mån <span>BRF</span>
                 </div>
                 <div className="flex justify-between">
-                  {item.rooms} RoK <span>{item.size}m² </span>
+                  {item.rooms} RoK <span>{item.size}m²</span>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

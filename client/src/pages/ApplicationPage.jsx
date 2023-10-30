@@ -7,7 +7,7 @@ const ApplicationPage = () => {
 
   return (
     <>
-      <div className="pagecontainer w-10/12 mx-auto mb-36 mt-10">
+      <div className="pagecontainer w-10/12 max-w-[1400px] mx-auto mb-36 mt-10">
         <div>
           <h1>
             Ansök till {item.street} {item.streetNumber}

@@ -22,6 +22,10 @@ const listingSchema = new Schema({
     type: String,
     // required: true,
   },
+  area: {
+    type: String,
+    // required: true,
+  },
   zipcode: {
     type: Number,
     // required: true,

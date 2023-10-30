@@ -7,7 +7,14 @@ import {
   PiElevatorDuotone,
 } from "react-icons/Pi";
 import { GiWashingMachine } from "react-icons/Gi";
-import { BsPersonWorkspace, BsBuildings } from "react-icons/Bs";
+import {
+  BsPersonWorkspace,
+  BsBuildings,
+  BsStar,
+  BsStarFill,
+  BsStarHalf,
+} from "react-icons/Bs";
+
 import { MdBalcony } from "react-icons/Md";
 import { GrMoney } from "react-icons/Gr";
 import { IoTodayOutline, IoBedOutline } from "react-icons/Io5";
@@ -74,7 +81,7 @@ const ListingDetails = () => {
   };
   return (
     <>
-      <div className="container w-11/12 mx-auto mt-6">
+      <div className="container w-10/12 mx-auto mt-6">
         <div className="firstFourImages flex h-[600px] mx-auto items-center">
           <div className="flex flex-row w-2/3 h-full">
             {firstFourImages.slice(0, 2).map((imageData, index) => (
@@ -213,7 +220,13 @@ const ListingDetails = () => {
               </p>
               <p className="flex flex-row justify-between">
                 Betyg:
-                <span className="flex flex-row">-INSERT STARS-</span>
+                <span className="flex flex-row">
+                  <BsStarFill className=" fill-primary" />
+                  <BsStarFill className=" fill-primary" />
+                  <BsStarFill className=" fill-primary" />
+                  <BsStarFill className=" fill-primary" />
+                  <BsStarHalf className=" fill-primary" />
+                </span>
               </p>
               <p className="py-4">
                 Ansökan är öppen och görs via vår bostadskö.
