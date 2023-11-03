@@ -100,11 +100,11 @@ const IndexPage = () => {
                 )}
                 <button
                   onClick={() => showNextImage(index)}
-                  className="text-white z-50 absolute top-1/2 transform -translate-y-1/2 right-0 h-full bg-white bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="text-white shadow-2xl fill-primary z-50 absolute top-1/2 transform -translate-y-1/2 right-0 h-full bg-white bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 >
                   <ArrowBigRight />
                 </button>
-                <div className="absolute flex items-center justify-center bottom-2 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute flex items-center justify-center bottom-2 w-full">
                   {item.images[0].data.map((_, buttonIndex) => (
                     <button
                       key={buttonIndex}
@@ -115,7 +115,7 @@ const IndexPage = () => {
                       }}
                       className={`bg-gray-200 opacity-50 rounded-2xl w-2 h-2 mx-0.5 ${
                         imageIndexes[index] === buttonIndex
-                          ? "bg-white-500 scale-150 opacity-100"
+                          ? "bg-white-500 scale-150 opacity-[100%] outline-black"
                           : ""
                       }`}
                     ></button>

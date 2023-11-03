@@ -90,15 +90,15 @@ const newListing = () => {
     if (!street) {
       missingFields.push("Gata");
     }
-    // if (!streetNumber) {
-    //   missingFields.push("Gatunummer");
-    // }
-    // if (!city) {
-    //   missingFields.push("Stad");
-    // }
-    // if (!zipcode) {
-    //   missingFields.push("Postnummer");
-    // }
+    if (!streetNumber) {
+      missingFields.push("Gatunummer");
+    }
+    if (!city) {
+      missingFields.push("Stad");
+    }
+    if (!zipcode) {
+      missingFields.push("Postnummer");
+    }
     if (missingFields.length > 0) {
       const missingFieldNames = missingFields.join(", ");
       toast.error(`Fält saknas: ${missingFieldNames}`);

@@ -6,8 +6,6 @@ const listingRoutes = require("./routes/listingRoutes");
 const authRoutes = require("./routes/authRoutes");
 const bodyParser = require("body-parser");
 
-
-
 app.use(
   cors({
     credentials: true, // Allow credentials
@@ -25,5 +23,10 @@ app.use(cookieParser());
 
 app.use("/", authRoutes);
 app.use("/", listingRoutes);
+
+// Handling undefined routes
+app.use((req, res, next) => {
+  res.status(404).send("Route not found.");
+});
 
 module.exports = app;

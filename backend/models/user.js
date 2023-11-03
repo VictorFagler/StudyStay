@@ -5,6 +5,12 @@ const userSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  applications: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Application", // Reference to the Application model
+    },
+  ],
 });
 
 const UserModel = mongoose.model("User", userSchema);

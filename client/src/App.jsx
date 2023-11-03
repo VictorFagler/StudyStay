@@ -11,6 +11,7 @@ import MyProfile from "./pages/MyProfile";
 import ListingDetails from "./pages/ListingDetails";
 import { DataProvider } from "./context/DataContext";
 import ApplicationPage from "./pages/ApplicationPage";
+import MyApplication from "./pages/MyApplication";
 
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
@@ -37,6 +38,7 @@ function App() {
               element={<ApplicationPage />}
             />
             <Route path="/listings/:id" index element={<ListingDetails />} />
+            <Route path="/myapplication" index element={<MyApplication/>} />
           </Routes>
         </DataProvider>
       </div>

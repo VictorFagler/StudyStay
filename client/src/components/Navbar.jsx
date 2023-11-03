@@ -115,7 +115,7 @@ export const Navbar = () => {
                     </Link>
                   </li>
                   <li className="border-t-2 border-gray-300 py-3">
-                    <Link to="/" className="text-black">
+                    <Link to="/myapplication" className="text-black">
                       Ansökningar
                     </Link>
                   </li>
