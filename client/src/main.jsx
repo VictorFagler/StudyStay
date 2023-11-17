@@ -8,7 +8,7 @@ import Footer from "./components/Footer.jsx";
 import { UserContextProvider } from "../context/userContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
 
       <UserContextProvider>
         <BrowserRouter>
@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </BrowserRouter>
       </UserContextProvider>
 
-  </React.StrictMode>
+  // </React.StrictMode>
 );

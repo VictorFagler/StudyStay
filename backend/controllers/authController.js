@@ -2,7 +2,6 @@ const User = require("../models/user");
 const { hashPassword, comparePassword } = require("../helpers/auth");
 const jwt = require("jsonwebtoken");
 
-
 // REGISTER USER
 const registerUser = async (req, res) => {
   try {
@@ -32,6 +31,7 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      // applications,
     });
     return res.json(user);
   } catch (error) {
@@ -54,8 +54,13 @@ const loginUser = async (req, res) => {
     // CHECK IF PASSWORDS MATCH
     const match = await comparePassword(password, user.password);
     if (match) {
+      
       jwt.sign(
-        { email: user.email, id: user._id, name: user.name },
+        {
+          id: user._id,
+          email: user.email,
+          name: user.name,
+        },
         process.env.JWT_SECRET,
         {},
         (err, token) => {
@@ -86,9 +91,46 @@ const getProfile = (req, res) => {
     res.json(null);
   }
 };
+const getUser = async (req, res) => {
+  const userId = req.params.id; // Assuming the user ID is in the URL parameters
+  try {
+    const user = await User.findById(userId);
+    if (user) {
+      res.json(user); // Return the user's information
+      console.log(user);
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const getUserApplications = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await UserModel.findById(userId).populate({
+      path: "applications",
+      model: "Application", // Specify the model name
+      select: "unitType street", // Specify the fields you want to select
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const userApplications = user.applications; // Array of populated applications
+    res.status(200).json({ userApplications });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   registerUser,
   loginUser,
   getProfile,
+  getUser,
+  getUserApplications,
 };

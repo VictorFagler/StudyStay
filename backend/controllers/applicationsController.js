@@ -1,40 +1,49 @@
-const Application = require("../models/application");
+const ApplicationModel = require("../models/application");
+const UserModel = require("../models/user");
 
-// Create a new application
 const createApplication = async (req, res) => {
-  try {
-    const newApplication = await Application.create(req.body);
-    res.status(201).json(newApplication);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+  // Destructure 'applications' from the request body
+  const { applications } = req.body;
+  const user = await UserModel.findById(req.params.id);
 
-// Get all applications
-const getApplications = async (req, res) => {
   try {
-    const applications = await Application.find();
-    res.status(200).json(applications);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+    const newApplication = await ApplicationModel.create({
+      unitType: applications.unitType,
+      street: applications.street,
+      streetNumber: applications.streetNumber,
+      zipcode: applications.zipcode,
+      area: applications.area,
+      isOpen: applications.isOpen,
+      images: applications.image,
+    });
 
-// Get one application by ID
-const getOneApplication = async (req, res) => {
-  try {
-    const application = await Application.findById(req.params.id);
-    if (!application) {
-      return res.status(404).json({ error: "Application not found" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
-    res.status(200).json(application);
+
+    user.applications.push(newApplication);
+
+    await user.save();
+
+    res.json({
+      message: "Application added to user's applications array successfully",
+      newApplication: {
+        _id: newApplication._id,
+        unitType: newApplication.unitType,
+        street: newApplication.street,
+        streetNumber: newApplication.streetNumber,
+        zipcode: newApplication.zipcode,
+        area: newApplication.area,
+        isOpen: newApplication.isOpen,
+        images: newApplication.image,
+      },
+    });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
 
 module.exports = {
   createApplication,
-  getApplications,
-  getOneApplication,
 };

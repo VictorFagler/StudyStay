@@ -4,6 +4,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const listingRoutes = require("./routes/listingRoutes");
 const authRoutes = require("./routes/authRoutes");
+const applicationRoutes = require("./routes/applicationRoutes");
 const bodyParser = require("body-parser");
 
 app.use(
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use("/", authRoutes);
 app.use("/", listingRoutes);
+app.use("/", applicationRoutes);
 
 // Handling undefined routes
 app.use((req, res, next) => {

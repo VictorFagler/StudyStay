@@ -1,13 +1,18 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 
-const applicationSchema = new Schema({
-  propertyId: { type: Schema.Types.ObjectId, ref: "Property" }, // Reference to the Property model
-  propertyName: { type: String },
-  applicationDate: { type: Date, default: Date.now },
-  // Add more application details as needed
+const ApplicationSchema = new mongoose.Schema({
+  unitType: { type: String },
+  street: { type: String },
+  streetNumber: { type: String },
+  zipcode: { type: Number },
+  area: { type: String },
+  isOpen: { type: Boolean, defaiult: false },
+  images: {
+    data: { type: String, required: true }, // Base64-encoded image data
+    contentType: { type: String }, // Content type of the image
+  },
 });
 
-const ApplicationModel = mongoose.model("Application", applicationSchema);
+const ApplicationModel = mongoose.model("Application", ApplicationSchema);
 
 module.exports = ApplicationModel;

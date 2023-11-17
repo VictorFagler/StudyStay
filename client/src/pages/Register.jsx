@@ -63,7 +63,7 @@ export default function RegisterForm() {
             <div className="flex flex-col justify-between">
               <input
                 placeholder="Förnamn"
-                className="bg-gray-200 h-[2em] p-3 uppercase"
+                className="bg-gray-200 h-[2em] p-3"
                 type="text"
                 id="firstname"
                 name="firstname"
@@ -76,12 +76,12 @@ export default function RegisterForm() {
             <div className="flex flex-col mt-4">
               <input
                 placeholder="Efternamn"
-                className="bg-gray-200 h-[2em] p-3 uppercase"
+                className="bg-gray-200 h-[2em] p-3"
                 type="text"
                 id="lastname"
                 name="lastname"
                 value={data.lastname}
-                onChange={(e) => setData({ ...data, name: e.target.value })}
+                onChange={(e) => setData({ ...data, lastname: e.target.value })}
                 required
               />
             </div>
@@ -89,7 +89,7 @@ export default function RegisterForm() {
             <div className="flex flex-col mt-4">
               <input
                 placeholder="E-mail"
-                className="bg-gray-200 h-[2em] p-3 uppercase"
+                className="bg-gray-200 h-[2em] p-3 "
                 type="email"
                 id="email"
                 name="email"
@@ -104,7 +104,7 @@ export default function RegisterForm() {
             <div className="flex flex-col">
               <input
                 placeholder="Lösenord"
-                className="bg-gray-200 h-[2em] p-3 uppercase"
+                className="bg-gray-200 h-[2em] p-3 "
                 type="password"
                 id="password"
                 name="password"
@@ -117,7 +117,7 @@ export default function RegisterForm() {
             <div className="flex flex-col mt-4">
               <input
                 placeholder="Bekräfta Lösenord"
-                className="bg-gray-200 h-[2em] p-3 uppercase"
+                className="bg-gray-200 h-[2em] p-3"
                 type="password"
                 id="confirmPassword"
                 name="confirmPassword"
@@ -146,6 +146,7 @@ export default function RegisterForm() {
           </div>
         </form>
         <button
+          onClick={registerUser}
           type="submit"
           className="mt-6 w-48 mx-auto uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl"
         >

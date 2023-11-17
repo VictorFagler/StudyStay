@@ -1,9 +1,65 @@
-import { React, useState } from "react";
+import { React, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { UserContext } from "../../context/userContext";
 
 const ApplicationPage = () => {
+  const { user, setUser } = useContext(UserContext);
   const location = useLocation();
   const { item, formattedMoveInDate } = location.state;
+
+  console.log("item streetname:  " + item.street);
+  console.log("image URL: " + item.images[0].data[0].length);
+
+  const handleApplication = async () => {
+    try {
+      const userId = user.id || user._id;
+      const appImage = item.images[0].data[0];
+
+      const newApplication = {
+        unitType: item.unitType,
+        street: item.street,
+        streetNumber: item.streetNumber,
+        zipcode: item.zipcode,
+        area: item.area,
+        isOpen: false,
+        image: {
+          data: appImage,
+          contentType: "image/jpeg",
+        },
+      };
+
+      // Send a POST request to the server
+      const response = await axios.post(`/users/${userId}/applications`, {
+        applications: newApplication,
+      });
+
+      // Log the actual response from the server
+      console.log("Server response:", response.data);
+
+      // Assuming the server responds with the created application
+      const createdApplication = response.data.newApplication;
+
+      // Push the relevant fields into the user's applications array
+      user.applications.push({
+        _id: createdApplication._id,
+        unitType: createdApplication.unitType,
+        street: createdApplication.street,
+        streetNumber: createdApplication.streetNumber,
+        zipcode: createdApplication.zipcode,
+        area: createdApplication.area,
+        isOpen: createdApplication.status,
+        image: createdApplication.image,
+      });
+
+      if (!userId) {
+        console.error("User ID not found");
+        return;
+      }
+    } catch (error) {
+      console.error("Error submitting application:", error);
+    }
+  };
 
   return (
     <>
@@ -84,7 +140,10 @@ const ApplicationPage = () => {
             <div className="flex flex-col">
               <p className="text-right">Jag godkänner hyresvärdens villkor</p>
               <br />
-              <button className="ml-auto w-48 uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl">
+              <button
+                onClick={handleApplication}
+                className="ml-auto w-48 uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl"
+              >
                 Ansök
               </button>
             </div>

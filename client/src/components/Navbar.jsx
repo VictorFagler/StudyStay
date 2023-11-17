@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { AiOutlineMenu } from "react-icons/ai";
 import { UserContext } from "../../context/userContext";
 import axios from "axios";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,6 +25,7 @@ export const Navbar = () => {
     try {
       await axios.post("/logout");
       setUser(null);
+      navigate("/login");
       console.log("Logging out...");
     } catch (error) {
       console.error("Error logging out:", error);
@@ -115,7 +117,7 @@ export const Navbar = () => {
                     </Link>
                   </li>
                   <li className="border-t-2 border-gray-300 py-3">
-                    <Link to="/myapplication" className="text-black">
+                    <Link to="/myapplications" className="text-black">
                       Ansökningar
                     </Link>
                   </li>

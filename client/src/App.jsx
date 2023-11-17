@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Route, Routes, useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import IndexPage from "./pages/IndexPage";
 import Login from "./pages/Login";
@@ -10,14 +10,16 @@ import axios from "axios";
 import MyProfile from "./pages/MyProfile";
 import ListingDetails from "./pages/ListingDetails";
 import { DataProvider } from "./context/DataContext";
+import { UserContext } from "../context/userContext";
 import ApplicationPage from "./pages/ApplicationPage";
-import MyApplication from "./pages/MyApplication";
+import UserApplication from "./pages/MyApplication";
 
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [data] = [];
+  // const [data] = [];
+  // const { user } = useContext(UserContext);
 
   return (
     <div className="App">
@@ -34,11 +36,10 @@ function App() {
             <Route
               path="/application/:id"
               index
-              
               element={<ApplicationPage />}
             />
             <Route path="/listings/:id" index element={<ListingDetails />} />
-            <Route path="/myapplication" index element={<MyApplication/>} />
+            <Route path="/myapplications" element={<UserApplication />} />
           </Routes>
         </DataProvider>
       </div>
