@@ -81,9 +81,9 @@ const IndexPage = () => {
           <Filter onFilter={filterData} />
         </div>
 
-        <div className="flex flex-wrap justify-center m-4 w-7/12 mx-auto">
+        <div className="flex flex-wrap justify-center m-4 mx-auto">
           {filteredData.map((item, index) => (
-            <div key={index} className="w-[14rem] m-4 relative ">
+            <div key={index} className="w-[20rem] m-4 relative ">
               <div className="h-[14rem] relative group">
                 <button
                   onClick={() => showPrevImage(index)}

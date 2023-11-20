@@ -14,15 +14,16 @@ import {
   BsStarFill,
   BsStarHalf,
 } from "react-icons/Bs";
-
 import { MdBalcony } from "react-icons/Md";
 import { GrMoney } from "react-icons/Gr";
 import { IoTodayOutline, IoBedOutline } from "react-icons/Io5";
 import { LuBox } from "react-icons/Lu";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 
 const ListingDetails = () => {
-  const { id } = useParams(); // Get the ID from the URL
+  const { id } = useParams();
   const [item, setItem] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState([]);
   // const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
@@ -79,10 +80,54 @@ const ListingDetails = () => {
     Balkong: <MdBalcony size={32} />,
     Hiss: <PiElevatorDuotone size={32} />,
   };
+  const firstImageData = item.images.length > 0 ? item.images[0].data[0] : null;
+
+  const nextImage = () => {
+    setCurrentIndex(
+      (prevIndex) => [prevIndex + 1] % item.images[0].data.length
+    );
+    console.log(currentIndex);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + item.images[0].data.length) %
+        item.images[0].data.length
+    );
+    console.log(currentIndex);
+  };
+  const currentImageData =
+    item.images.length > 0 ? item.images[0].data[currentIndex] : null;
+
   return (
     <>
       <div className="container w-10/12 mx-auto mt-6">
-        <div className="firstFourImages flex h-[600px] mx-auto items-center">
+        <div className="md:hidden h-full max-w-100">
+          {firstImageData && (
+            <div className="p-1 h-1/2 relative">
+              <button
+                onClick={prevImage}
+                className="text-white z-50 absolute left-0 h-full bg-white bg-opacity-10 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <ArrowBigLeft />
+              </button>
+              <img
+                className="rounded-xl object-cover h-[24rem] w-full"
+                src={currentImageData}
+                alt="img"
+              />
+              <button
+                onClick={nextImage}
+                className="text-white z-50 absolute top-1/2 transform -translate-y-1/2 right-0 h-full bg-white bg-opacity-20 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <ArrowBigRight />
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="hidden md:firstFourImages md:flex md:h-[600px] mx-auto items-center">
           <div className="flex flex-row w-2/3 h-full">
             {firstFourImages.slice(0, 2).map((imageData, index) => (
               <div key={index} className="w-full h-full">
@@ -106,8 +151,7 @@ const ListingDetails = () => {
             ))}
           </div>
         </div>
-
-        <div className="housingDetails flex w-8/12 mx-auto my-6 justify-center">
+        <div className="housingDetails flex md:w-8/12 mx-auto my-6 justify-center">
           <div className="border-r-2 w-1/6 flex flex-col items-center">
             <BiMap size={32} />
             {item.street} {item.streetNumber}
@@ -133,8 +177,7 @@ const ListingDetails = () => {
             <div>{item.unitType}</div>
           </div>
         </div>
-
-        <div className="AdditionImages flex h-[24em]">
+        <div className="AdditionImages hidden lg:flex lg:h-[24em]">
           {restOfImages.map((imageData, index) => (
             <div key={index} className="flex h-full w-1/4 py-2 px-3">
               <img
@@ -145,7 +188,6 @@ const ListingDetails = () => {
             </div>
           ))}
         </div>
-
         <div className=" mx-auto mt-8 flex justify-center">
           <div className="w-full flex-start pr-16 mr-28">
             <h1 className="text-4xl">

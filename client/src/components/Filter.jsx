@@ -55,7 +55,7 @@ const Filter = ({ onFilter, handleFilter }) => {
   };
 
   return (
-    <div className="flex flex-row w-6/12 mx-auto mt-6">
+    <div className="flex flex-row mx-auto mt-6 w-11/12 md:w-6/12">
       <button
         onClick={() => {
           if (unitType === "Hus") {

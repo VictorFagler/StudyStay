@@ -10,17 +10,15 @@ import axios from "axios";
 import MyProfile from "./pages/MyProfile";
 import ListingDetails from "./pages/ListingDetails";
 import { DataProvider } from "./context/DataContext";
-import { UserContext } from "../context/userContext";
 import ApplicationPage from "./pages/ApplicationPage";
+import AcceptedPage from "./pages/AcceptedPage";
 import UserApplication from "./pages/MyApplication";
+import PaymentPage from "./pages/PaymentPage";
 
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
 
 function App() {
-  // const [data] = [];
-  // const { user } = useContext(UserContext);
-
   return (
     <div className="App">
       <div className="main-content min-h-[100vh] mb-6">
@@ -40,6 +38,8 @@ function App() {
             />
             <Route path="/listings/:id" index element={<ListingDetails />} />
             <Route path="/myapplications" element={<UserApplication />} />
+            <Route path="/accepted/:id" element={<AcceptedPage />} />
+            <Route path="/payment/:id" element={<PaymentPage />} />
           </Routes>
         </DataProvider>
       </div>

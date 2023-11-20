@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const MyApplication = () => {
   const { user, setUser } = useContext(UserContext);
@@ -37,38 +38,28 @@ const MyApplication = () => {
       console.error("Error deleting application:", error);
     }
   };
-  const ReloadButton = () => {
-    const handleReloadClick = () => {
-      window.location.reload();
-    };
 
-    return (
-      <div className="w-32 h-22 text-center bg-red-200 rounded p-2">
-        <button onClick={handleReloadClick}>Reload Page</button>
-      </div>
-    );
-  };
-
+  console.log("user apps: ", user?.applications);
   return (
-    <div className="container w-10/12 mx-auto mt-6">
+    <div className="container w-10/12 mx-auto mt-6 flex flex-col items-center justify-center">
+      <h2 className="">Mina ansökningar</h2>
+      <p>
+        Nedan kan du se lägenheter som du har ansökt om och vad det är för
+        status idag
+      </p>
       {user ? (
-        <div className="applications-list flex flex-col items-center p-10">
-          <h2 className="opacity-40">Användarnamn: {user.name}</h2>
-          <h3 className="">Applications:</h3>
+        <div className="applications-list w-full lg:max-w-2xl">
           {user.applications ? (
             user.applications.map((application) => (
               <div
                 key={application._id}
-                className="application-box bg-gray-200 p-6 mt-6 flex flex-col"
+                className="application-box mt-6 flex flex-col pb-10 w-full"
               >
-                <p className="text-center opacity-60">
-                  appId: {application._id}
-                </p>
                 {application.images && application.images.length > 0 ? (
-                  <div>
+                  <div className="w-100">
                     <img
-                      className="p-1 rounded-2xl object-cover h-36 w-96"
-                      src={application.images[0].data[0]}
+                      className="object-cover h-44 w-full rounded-lg"
+                      src={application.images[0].data}
                       alt={`Image`}
                       onError={(e) => console.error("Error loading image:", e)}
                     />
@@ -76,31 +67,52 @@ const MyApplication = () => {
                 ) : (
                   <div>
                     <p>No images found</p>
-                    <ReloadButton />
                   </div>
                 )}
-                <p className="font-bold">
-                  {application.street + " " + application.streetNumber}
-                </p>
-                <p>{application.unitType}</p>
-                <p>{application.zipcode}</p>
-                <p>{application.area}</p>
-                {application.isOpen === false ? (
-                  <div className="bg-red-200 text-center">
-                    <p>False</p>
+                <div className="grid grid-cols-2">
+                  <div className="py-2 px-1 flex flex-col left">
+                    <p className="font-bold">
+                      {application.street + " " + application.streetNumber}
+                    </p>
+                    <p>{application.zipcode}</p>
+                    <p>{application.area}</p>
                   </div>
-                ) : (
-                  <div className="bg-green-200 text-center">
-                    <p>True</p>
-                  </div>
-                )}
+                  <div className="py-2 px-4 flex flex-col right justify-between text-right ml-auto">
+                    {application.isOpen === false ? (
+                      <>
+                        <div className="flex items-center ml-auto">
+                          <div className="bg-red-500 w-4 h-4 rounded-full mr-2"></div>
+                          <div>
+                            <p>Ej godkänd</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() =>
+                            handleDeleteApplication(user, application)
+                          }
+                          className="mt-2 bg-primary text-white py-0.5 px-4 w-32 rounded-2xl shadow-md shadow-gray-500"
+                        >
+                          TA BORT
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-center ml-auto">
+                          <div className="bg-green-500 w-4 h-4 rounded-full mr-2"></div>
+                          <div className="">
+                            <p>Godkänd</p>
+                          </div>
+                        </div>
 
-                <button
-                  onClick={() => handleDeleteApplication(user, application)}
-                  className="mt-2 bg-red-500 text-white px-4 py-2 rounded"
-                >
-                  Delete Application
-                </button>
+                        <Link to={`/accepted/${application._id}`}>
+                          <button className="mt-2 bg-primary text-white py-0.5 px-4 w-32 rounded-2xl shadow-md shadow-gray-500 ">
+                            GÅ VIDARE
+                          </button>
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             ))
           ) : (

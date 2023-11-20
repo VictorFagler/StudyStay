@@ -2,14 +2,12 @@ import { React, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../context/userContext";
+import { toast } from "react-hot-toast";
 
 const ApplicationPage = () => {
   const { user, setUser } = useContext(UserContext);
   const location = useLocation();
   const { item, formattedMoveInDate } = location.state;
-
-  console.log("item streetname:  " + item.street);
-  console.log("image URL: " + item.images[0].data[0].length);
 
   const handleApplication = async () => {
     try {
@@ -23,6 +21,7 @@ const ApplicationPage = () => {
         zipcode: item.zipcode,
         area: item.area,
         isOpen: false,
+        price: item.price,
         image: {
           data: appImage,
           contentType: "image/jpeg",
@@ -36,28 +35,20 @@ const ApplicationPage = () => {
 
       // Log the actual response from the server
       console.log("Server response:", response.data);
+      toast.success("Ansökan skapad");
 
       // Assuming the server responds with the created application
       const createdApplication = response.data.newApplication;
-
-      // Push the relevant fields into the user's applications array
-      user.applications.push({
-        _id: createdApplication._id,
-        unitType: createdApplication.unitType,
-        street: createdApplication.street,
-        streetNumber: createdApplication.streetNumber,
-        zipcode: createdApplication.zipcode,
-        area: createdApplication.area,
-        isOpen: createdApplication.status,
-        image: createdApplication.image,
-      });
+      user.applications.push(createdApplication);
 
       if (!userId) {
         console.error("User ID not found");
+        toast.error("No user ID found");
         return;
       }
     } catch (error) {
       console.error("Error submitting application:", error);
+      toast.error("X");
     }
   };
 
