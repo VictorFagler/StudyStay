@@ -1,50 +1,66 @@
-import { React, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
-import { Link } from "react-router-dom";
 
 const MyProfile = () => {
-  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+ 
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+
+  const handleChangePassword = () => {
+    // Fiktiv funktion för att hantera lösenordsbyte
+    toast.success("Lösenordet har ändrats!");
+  };
+
+  const handleLogout = () => {
+    // Fiktiv funktion för att logga ut användaren
+    setUser(null);
+    navigate("/");
+    toast.success("Du har loggat ut!");
+  };
+
   return (
     <>
-      <div className="w-full h-[26em]">
+      <div className="w-full h-[16em] md:h-[26em]">
         <img
           src="loginpage.png"
           alt="loginpage"
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="content-container w-10/12 mx-auto text-center flex flex-col items-center py-6">
-        <h1>Mina sidor</h1>
-        <p>
-          Här loggar du in på Mina Sidor om du är hyresgäst hos oss eller om du
-          står i vår bostadskö.
-        </p>
-        <img src="studystay-logo.png" alt="studystay" className="py-6" />
-        <p className="text-lg font-semibold">Vänligen fyll i fälten nedan</p>
-        <form action="submit" className="py-6">
-          <input
-            type="username"
-            placeholder="Användarnamn"
-            className="bg-gray-200 h-[2em] w-[16em] rounded-lg p-2 placeholder-black mr-6"
-          />
-          <input
-            type="password"
-            placeholder="********"
-            className="bg-gray-200 h-[2em] w-[16em] rounded-lg p-2 placeholder-black"
-          />
-        </form>
-        <button className="mt-6 w-48 mx-auto uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl">
-          Logga in
-        </button>
-        <p className="pt-6">Vill du registerea ett konto?</p>
-        <p>
-          <Link to="/register">
-            <span className="font-bold">Klicka här</span>
-          </Link>{" "}
-          för att registera dig.
-        </p>
+      <div className="content-container w-10/12 mx-auto text-center flex flex-col md:items-center py-6">
+        {user ? (
+          // Om användaren är inloggad, visa användarinformation
+          <>
+            <h1>Välkommen {user.name}!</h1>
+            <p>Här kan du utföra några åtgärder:</p>
+
+            <div className="flex flex-col items-center mt-6">
+              <button
+                onClick={handleChangePassword}
+                className="mt-4 w-48 uppercase bg-blue-500 text-white py-2 px-6 rounded-3xl drop-shadow-xl"
+              >
+                Byt lösenord
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="mt-4 w-48 uppercase bg-red-500 text-white py-2 px-6 rounded-3xl drop-shadow-xl"
+              >
+                Logga ut
+              </button>
+            </div>
+          </>
+        ) : null}
       </div>
-      {/* <div>{!!user && <h2>Välkommen {user.name} !</h2>}</div> */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { BiWifi, BiSolidParking, BiMap } from "react-icons/Bi";
 import {
@@ -23,8 +23,12 @@ import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 const ListingDetails = () => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState([]);
-  // const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState([0]);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     fetch(`http://localhost:5000/listings/${id}`)
@@ -38,7 +42,6 @@ const ListingDetails = () => {
         if (res) {
           setItem(res);
         } else {
-          // Handle the case where the item is not found
           setItem(null);
         }
       })
@@ -80,13 +83,11 @@ const ListingDetails = () => {
     Balkong: <MdBalcony size={32} />,
     Hiss: <PiElevatorDuotone size={32} />,
   };
-  const firstImageData = item.images.length > 0 ? item.images[0].data[0] : null;
 
   const nextImage = () => {
     setCurrentIndex(
       (prevIndex) => [prevIndex + 1] % item.images[0].data.length
     );
-    console.log(currentIndex);
   };
 
   const prevImage = () => {
@@ -95,38 +96,83 @@ const ListingDetails = () => {
         (prevIndex - 1 + item.images[0].data.length) %
         item.images[0].data.length
     );
-    console.log(currentIndex);
   };
+
+  const firstImageData = item.images.length > 0 ? item.images[0].data[0] : null;
+
   const currentImageData =
     item.images.length > 0 ? item.images[0].data[currentIndex] : null;
 
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (itemIndex) => {
+    if (touchStart - touchEnd > 50) {
+      // Swipe left
+      nextImage();
+    } else if (touchEnd - touchStart > 50) {
+      // Swipe right
+      prevImage();
+    }
+  };
+
   return (
     <>
-      <div className="container w-10/12 mx-auto mt-6">
-        <div className="md:hidden h-full max-w-100">
+      <div className="container md:w-10/12 w-100 justify-center items-center mx-auto mt-6">
+        {/* IMAGE SLIDESHOW ON SMALL DEVICE */}
+        <div
+          className="md:hidden w-full items-center justify-center max-h-80"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {firstImageData && (
-            <div className="p-1 h-1/2 relative">
+            <div className="p-1 relative w-100 object">
               <button
                 onClick={prevImage}
                 className="text-white z-50 absolute left-0 h-full bg-white bg-opacity-10 group-hover:opacity-100 transition-opacity duration-300"
               >
                 <ArrowBigLeft />
               </button>
-              <img
-                className="rounded-xl object-cover h-[24rem] w-full"
-                src={currentImageData}
-                alt="img"
-              />
+              <div className="w-[100%] h-80">
+                <img
+                  className="rounded-xl w-full h-80 object-cover"
+                  src={currentImageData}
+                  alt="img"
+                />
+              </div>
               <button
                 onClick={nextImage}
                 className="text-white z-50 absolute top-1/2 transform -translate-y-1/2 right-0 h-full bg-white bg-opacity-20 group-hover:opacity-100 transition-opacity duration-300"
               >
                 <ArrowBigRight />
               </button>
+              <div className="absolute flex items-center justify-center bottom-3 w-full">
+                {item.images[0].data.map((_, buttonIndex) => (
+                  <button
+                    key={buttonIndex}
+                    onClick={() => {
+                      const updatedIndexes = [...currentIndex];
+                      updatedIndexes[currentIndex] = buttonIndex;
+                      setCurrentIndex(updatedIndexes);
+                    }}
+                    className={`bg-gray-200 opacity-50 rounded-2xl w-2 h-2 mx-0.5 ${
+                      currentIndex === buttonIndex
+                        ? "bg-white-500 scale-150 opacity-[100%] outline-black"
+                        : ""
+                    }`}
+                  ></button>
+                ))}
+              </div>
             </div>
           )}
         </div>
-
+        {/* IMAGES ON SMALL MD+ DEVICE */}
         <div className="hidden md:firstFourImages md:flex md:h-[600px] mx-auto items-center">
           <div className="flex flex-row w-2/3 h-full">
             {firstFourImages.slice(0, 2).map((imageData, index) => (
@@ -151,45 +197,48 @@ const ListingDetails = () => {
             ))}
           </div>
         </div>
-        <div className="housingDetails flex md:w-8/12 mx-auto my-6 justify-center">
-          <div className="border-r-2 w-1/6 flex flex-col items-center">
+        <div className="housingDetails flex md:w-12/12 lg:w-10/12 mx-auto my-6 justify-center">
+          <div className="hidden border-r-2 w-1/6 md:flex flex-col items-center">
             <BiMap size={32} />
             {item.street} {item.streetNumber}
           </div>
-          <div className="border-r-2 w-1/6 flex flex-col items-center">
+          <div className="border-r-2 w-1/3 md:w-1/6 flex flex-col items-center">
             <GrMoney size={32} />
             <div>{item.price} kr/mån</div>
           </div>
-          <div className="border-r-2 w-1/6 flex flex-col items-center">
+          <div className="border-r-2 w-1/3 md:w-1/6 flex flex-col items-center">
             <IoBedOutline size={32} />
             <div>{item.rooms} rum</div>
           </div>
-          <div className="border-r-2 w-1/6 flex flex-col items-center">
+          <div className="border-r-2 w-1/3 md:w-1/6 flex flex-col items-center">
             <LuBox size={32} />
             <div>{item.size} m²</div>
           </div>
-          <div className="border-r-2 w-1/6 flex flex-col items-center">
+          <div className="hidden border-r-2 w-1/6 md:flex flex-col items-center">
             <IoTodayOutline size={32} />
             <div>{formattedDate}</div>
           </div>
-          <div className="w-1/6 flex flex-col items-center">
+          <div className="hidden w-1/6 md:flex flex-col items-center">
             <BsBuildings size={32} />
             <div>{item.unitType}</div>
           </div>
         </div>
-        <div className="AdditionImages hidden lg:flex lg:h-[24em]">
-          {restOfImages.map((imageData, index) => (
-            <div key={index} className="flex h-full w-1/4 py-2 px-3">
-              <img
-                className="rounded-xl object-cover w-full h-full"
-                src={`data:${item.images[0].contentType};${imageData}`}
-                alt="img"
-              />
-            </div>
-          ))}
-        </div>
-        <div className=" mx-auto mt-8 flex justify-center">
-          <div className="w-full flex-start pr-16 mr-28">
+        {restOfImages.length > 0 ? (
+          // Render additional images if there are more than 0
+          <div className="AdditionImages hidden lg:flex lg:h-[24em]">
+            {restOfImages.map((imageData, index) => (
+              <div key={index} className="flex h-full w-1/4 py-2 px-3">
+                <img
+                  className="rounded-xl object-cover w-full h-full"
+                  src={`data:${item.images[0].contentType};${imageData}`}
+                  alt="img"
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+        <div className=" mx-auto mt-8 flex flex-wrap md:flex-nowrap justify-center">
+          <div className="w-full md:flex-start p-3 md:pr-16 md:mr-28">
             <h1 className="text-4xl">
               {item.street} {item.streetNumber}
             </h1>
@@ -240,9 +289,11 @@ const ListingDetails = () => {
 
           {/* QUICKINFO BOX */}
 
-          <div className="quickinfo flex flex-col flex-end w-5/12">
-            <img src="/studystay-logo.png" alt="Logo-img" />
-            <div className="flex flex-col bg-blue-gray-200 p-6">
+          <div className="quickinfo p-2 flex w-full flex-wrap-reverse md:flex-wrap md:flex-col md:flex-end md:w-6/12">
+            <div className="hidden md:flex">
+              <img src="/studystay-logo.png" alt="Logo-img" />
+            </div>
+            <div className="flex flex-col w-full bg-blue-gray-200 p-6 rounded-xl">
               <h2 className="font-bold">Översikt</h2>
               <p className="flex justify-between">
                 Område: <span>{item.area}</span>

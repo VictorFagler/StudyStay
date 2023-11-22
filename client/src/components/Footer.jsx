@@ -5,8 +5,8 @@ const Footer = () => {
   return (
     <>
       <footer>
-        <div className="justify-evenly py-6 flex bg-[#F8F8F8] text-[#555555] text-s">
-          <div className="support">
+        <div className="px-6 center md:justify-evenly py-4 flex flex-wrap bg-[#F8F8F8] text-[#555555] text-s">
+          <div className="support p-4">
             <h4 className="text-lg text-black">Support</h4>
             <p>StudyStayCover</p>
             <p>Anti-discrimination</p>
@@ -15,14 +15,14 @@ const Footer = () => {
             <p>Report neighborhood problems</p>
           </div>
 
-          <div className="hosting ">
+          <div className="hosting p-4">
             <h4 className="text-lg text-black">Hosting</h4>
             <p>Rent out your accommodation</p>
             <p>StudyStayCover for hosts</p>
             <p>Host resources</p>
             <p>Community forum</p>
           </div>
-          <div className="studystay">
+          <div className="studystay p-4">
             <h4 className="text-lg text-black">StudyStay</h4>
             <p>Press room</p>
             <p>New features</p>

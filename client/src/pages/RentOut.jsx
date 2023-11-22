@@ -83,30 +83,32 @@ const newListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const missingFields = [];
-    if (!unitType) {
-      missingFields.push("unitType");
-    }
-    if (!street) {
-      missingFields.push("Gata");
-    }
-    if (!streetNumber) {
-      missingFields.push("Gatunummer");
-    }
-    if (!city) {
-      missingFields.push("Stad");
-    }
-    if (!zipcode) {
-      missingFields.push("Postnummer");
-    }
-    if (missingFields.length > 0) {
-      const missingFieldNames = missingFields.join(", ");
-      toast.error(`Fält saknas: ${missingFieldNames}`);
-      return;
-    }
-
     if (isFormSubmitted)
       try {
+        const missingFields = [];
+        if (!unitType) {
+          missingFields.push("unitType");
+        }
+        if (!street) {
+          missingFields.push("Gata");
+        }
+        if (!streetNumber) {
+          missingFields.push("Gatunummer");
+        }
+        if (!city) {
+          missingFields.push("Stad");
+        }
+        if (!zipcode) {
+          missingFields.push("Postnummer");
+        }
+        if (!selectedImages) {
+          missingFields.push("Bild");
+        }
+        if (missingFields.length > 0) {
+          const missingFieldNames = missingFields.join(", ");
+          toast.error(`Fält saknas: ${missingFieldNames}`);
+          return;
+        }
         const { data } = await axios.post(
           "/listings",
           {
@@ -132,6 +134,7 @@ const newListing = () => {
         } else {
           clearFilters();
           toast.success("Listing created");
+          setIsFormSubmitted(false);
         }
       } catch (error) {
         console.log(error);

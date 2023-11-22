@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Filter from "../components/Filter.jsx";
 import { Link } from "react-router-dom";
 import { useData } from "../context/DataContext.jsx";
@@ -7,7 +7,8 @@ import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 const IndexPage = () => {
   const { data, filteredData, setData, setFilteredData } = useData();
   const [imageIndexes, setImageIndexes] = useState([]);
-
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
   useEffect(() => {
     if (data.length > 0) {
       setImageIndexes(Array(filteredData.length).fill(0));
@@ -58,6 +59,23 @@ const IndexPage = () => {
     });
     setFilteredData(filtered);
   };
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (itemIndex) => {
+    if (touchStart - touchEnd > 50) {
+      // Swipe left
+      showNextImage(itemIndex);
+    } else if (touchEnd - touchStart > 50) {
+      // Swipe right
+      showPrevImage(itemIndex);
+    }
+  };
 
   return (
     <>
@@ -68,13 +86,13 @@ const IndexPage = () => {
             alt="banner"
             className="w-full md:max-h-[40em]"
           />
-          <div className="around absolute inset-0 flex flex-col items-center justify-center text-center">
-            <h2 className="text-4xl sm:text-4xl text-brown-50 drop-shadow lg:text-6xl">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <h2 className="text-2xl md:text-4xl lg:text-6xl text-brown-50 drop-shadow-xl">
               Hitta din nya studentbostad
             </h2>
-            <button className="lg:text-1xl lg:mt-20 px-4 py-1 mt-8 mb-1 rounded-lg text-brown-50 bg-orange-900 drop-shadow-2xl hover:bg-orange-900">
+            {/* <h2 className="lg:text-4xl lg:mt-20 px-4 py-1 mt-8 mb-1 rounded-lg text-brown-50 drop-shadow-2xl">
               Ansök idag
-            </button>
+            </h2> */}
           </div>
         </div>
         <div>
@@ -84,7 +102,12 @@ const IndexPage = () => {
         <div className="flex flex-wrap justify-center m-4 mx-auto">
           {filteredData.map((item, index) => (
             <div key={index} className="w-[20rem] m-4 relative ">
-              <div className="h-[14rem] relative group">
+              <div
+                className="h-[14rem] relative group"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={() => handleTouchEnd(index)}
+              >
                 <button
                   onClick={() => showPrevImage(index)}
                   className="text-white z-50 absolute left-0 h-full bg-white bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"

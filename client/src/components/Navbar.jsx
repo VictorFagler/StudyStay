@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { AiOutlineMenu } from "react-icons/ai";
 import { UserContext } from "../../context/userContext";
@@ -9,14 +9,9 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const toggleProfileMenu = () => {
+  const toggleProfileMenu = (event) => {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   };
 
@@ -46,8 +41,6 @@ export const Navbar = () => {
 
     if (isProfileMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
@@ -63,26 +56,15 @@ export const Navbar = () => {
             <img src="/studystay-logo.png" alt="Logo" className="scale-75" />
           </Link>
         </div>
-        <div className="lg:hidden mt-2">
-          <button
-            onClick={toggleMobileMenu}
-            className="text-black focus:outline-none"
-          >
-            <AiOutlineMenu size={24} />
-          </button>
-        </div>
-        <ul
-          className={`${
-            isMobileMenuOpen ? "block" : "hidden"
-          } lg:flex lg:space-x-8 text-xl ml-auto`}
-        >
+
+        <ul className="flex space-x-8 text-xl ml-auto">
           <li>
-            <Link to="/about" className="text-black">
+            <Link to="/about" className="text-black hidden md:flex">
               Om oss
             </Link>
           </li>
           <li>
-            <Link to="/rentout" className="text-black">
+            <Link to="/rentout" className="text-black hidden md:flex">
               Hyr ut
             </Link>
           </li>
@@ -102,42 +84,68 @@ export const Navbar = () => {
             {isProfileMenuOpen && (
               <div
                 ref={profileMenuRef}
-                className="absolute bg-white border border-t-0 border-gray-300 shadow"
+                className="absolute bg-white border border-t-0 border-gray-300 shadow w-full md:w-80"
                 style={{ right: "0", top: "100%", zIndex: 9999 }}
               >
-                <ul className="w-80 px-10 py-8 text-center">
+                <ul className=" md:w-80 px-10 py-8 text-center">
                   <li className="py-3">
-                    <Link to="/profile" className="text-black">
+                    <Link
+                      to="/profile"
+                      className="text-black"
+                      onClick={toggleProfileMenu}
+                    >
                       Min profil
                     </Link>
                   </li>
                   <li className="border-t-2 border-gray-300 py-3">
-                    <Link to="/" className="text-black">
+                    <Link
+                      to="/"
+                      className="text-black"
+                      onClick={toggleProfileMenu}
+                    >
                       Bostäder
                     </Link>
                   </li>
-                  <li className="border-t-2 border-gray-300 py-3">
+                  <li
+                    className="border-t-2 border-gray-300 py-3"
+                    onClick={toggleProfileMenu}
+                  >
                     <Link to="/myapplications" className="text-black">
                       Ansökningar
                     </Link>
                   </li>
-                  <li className="border-t-2 border-gray-300 py-3">
+                  <li
+                    className="border-t-2 border-gray-300 py-3"
+                    onClick={toggleProfileMenu}
+                  >
                     <Link to="/" className="text-black">
                       Kontakt
                     </Link>
                   </li>
                   <li className="border-t-2 border-gray-300 py-3">
-                    <Link to="/" className="text-black">
+                    <Link
+                      to="/"
+                      className="text-black"
+                      onClick={toggleProfileMenu}
+                    >
                       Villkor
                     </Link>
                   </li>
                   <li className="border-t-2 border-gray-300 py-3">
-                    <Link to="/rentout" className="text-black">
+                    <Link
+                      to="/rentout"
+                      className="text-black"
+                      onClick={toggleProfileMenu}
+                    >
                       Hyr ut
                     </Link>
                   </li>
                   <li className="border-t-2 border-gray-300 py-3">
-                    <Link to="/about" className="text-black">
+                    <Link
+                      to="/about"
+                      className="text-black"
+                      onClick={toggleProfileMenu}
+                    >
                       Om oss
                     </Link>
                   </li>
@@ -154,7 +162,10 @@ export const Navbar = () => {
                       </div>
                     ) : (
                       <Link to="/login">
-                        <button className="text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase">
+                        <button
+                          className="text-white text-sm bg-[#E78121] rounded-2xl px-8 py-2 uppercase"
+                          onClick={toggleProfileMenu}
+                        >
                           Logga in
                         </button>
                       </Link>

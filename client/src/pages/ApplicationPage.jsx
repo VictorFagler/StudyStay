@@ -1,16 +1,30 @@
-import { React, useState, useContext } from "react";
+import { React, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../context/userContext";
 import { toast } from "react-hot-toast";
 
 const ApplicationPage = () => {
-  const { user, setUser } = useContext(UserContext);
   const location = useLocation();
+  const { user, setUser } = useContext(UserContext);
   const { item, formattedMoveInDate } = location.state;
+  const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
 
   const handleApplication = async () => {
     try {
+      if (!isChecked) {
+        // Om checkboxen inte är markerad, ge användaren ett meddelande
+        toast.error("Du måste godkänna villkoren för att ansöka.");
+        return;
+      }
       const userId = user.id || user._id;
       const appImage = item.images[0].data[0];
 
@@ -48,27 +62,27 @@ const ApplicationPage = () => {
       }
     } catch (error) {
       console.error("Error submitting application:", error);
-      toast.error("X");
+      toast.error("Du måste vara inloggad");
     }
   };
 
   return (
     <>
-      <div className="pagecontainer w-10/12 max-w-[1400px] mx-auto mb-36 mt-10">
+      <div className="pagecontainer md:w-10/12 max-w-[1400px] mx-auto mb-36 mt-10">
         <div>
-          <h1>
+          <h1 className="text-2xl md:text-4xl lg:text-6xl justify-center text-center">
             Ansök till {item.street} {item.streetNumber}
           </h1>
         </div>
 
         {/* Parent container for leftside and rightside */}
-        <div className="flex flex-wrap">
-          <div className="w-1/2 p-4 pr-6">
-            <div className="mb-8 max-w-2xl">
+        <div className="flex flex-wrap justify-center">
+          <div className="lg:w-1/2 p-4 pr-6">
+            <div className="mb-8 max-w-2xl ">
               <img
                 src={`${item.images[0].data[0]}`}
                 alt={item.title}
-                className="h-[38em] object-cover rounded-xl"
+                className="md:h-[38em] object-cover rounded-xl"
               />
             </div>
             <div className="översikt max-w-2xl bg-gray-300 px-8 py-12 rounded-xl flex-col space-y-1 ">
@@ -96,10 +110,10 @@ const ApplicationPage = () => {
               </p>
             </div>
           </div>
-          <div className="w-1/2 p-4 pl-10 ">
+          <div className="lg:w-1/2 p-4 md:pl-10 ">
             <h4 className="font-bold">
               Viktiga krav och villkor från hyresföreningen
-            </h4>{" "}
+            </h4>
             <br />
             <p>
               <span className="font-bold">1. Deposition:</span> En deposition om
@@ -129,11 +143,19 @@ const ApplicationPage = () => {
             </p>
             <br />
             <div className="flex flex-col">
-              <p className="text-right">Jag godkänner hyresvärdens villkor</p>
+              <label className="flex items-center mx-auto md:ml-auto md:mr-0">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                Jag godkänner hyresvärdens villkor
+              </label>
               <br />
               <button
                 onClick={handleApplication}
-                className="ml-auto w-48 uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl"
+                className="mx-auto md:ml-auto md:mr-0 w-48 uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl"
               >
                 Ansök
               </button>
