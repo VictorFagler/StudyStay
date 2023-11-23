@@ -139,7 +139,7 @@ const ListingDetails = () => {
               >
                 <ArrowBigLeft />
               </button>
-              <div className="w-[100%] h-80">
+              <div className="w-[100%] h-80 overflow-hidden">
                 <img
                   className="rounded-xl w-full h-80 object-cover"
                   src={currentImageData}

@@ -34,6 +34,7 @@ const MyApplication = () => {
         ),
       };
       setUser(updatedUser);
+      toast.success("Ansökan borttagen");
     } catch (error) {
       console.error("Error deleting application:", error);
     }
@@ -56,9 +57,9 @@ const MyApplication = () => {
                 className="application-box mt-6 flex flex-col pb-10 w-full"
               >
                 {application.images && application.images.length > 0 ? (
-                  <div className="w-100">
+                  <div className="flex w-100 h-36 overflow-hidden justify-center">
                     <img
-                      className="object-cover h-44 w-full rounded-lg"
+                      className="object-cover w-full rounded-lg"
                       src={application.images[0].data}
                       alt={`Image`}
                       onError={(e) => console.error("Error loading image:", e)}
@@ -70,13 +71,15 @@ const MyApplication = () => {
                   </div>
                 )}
                 <div className="grid grid-cols-2">
-                  <div className="py-2 px-1 flex flex-col left">
-                    <p className="font-bold">
-                      {application.street + " " + application.streetNumber}
-                    </p>
-                    <p>{application.zipcode}</p>
-                    <p>{application.area}</p>
-                  </div>
+                  <Link to={`/listings/${application.listingId}`}>
+                    <div className="py-2 px-1 flex flex-col left">
+                      <p className="font-bold">
+                        {application.street + " " + application.streetNumber}
+                      </p>
+                      <p>{application.zipcode}</p>
+                      <p>{application.area}</p>
+                    </div>
+                  </Link>
                   <div className="py-2 px-4 flex flex-col right justify-between text-right ml-auto">
                     {application.status === "denied" ? (
                       <>

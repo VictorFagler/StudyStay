@@ -14,6 +14,7 @@ import ApplicationPage from "./pages/ApplicationPage";
 import AcceptedPage from "./pages/AcceptedPage";
 import UserApplication from "./pages/MyApplication";
 import PaymentPage from "./pages/PaymentPage";
+import AcceptedPayment from "./pages/AcceptedPayment";
 
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
@@ -40,6 +41,7 @@ function App() {
             <Route path="/myapplications" element={<UserApplication />} />
             <Route path="/accepted/:id" element={<AcceptedPage />} />
             <Route path="/payment/:id" element={<PaymentPage />} />
+            <Route path="/acceptedpayment" element={<AcceptedPayment />} />
           </Routes>
         </DataProvider>
       </div>

@@ -1,5 +1,5 @@
 import { React, useState, useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../context/userContext";
 import { toast } from "react-hot-toast";
@@ -9,6 +9,7 @@ const ApplicationPage = () => {
   const { user, setUser } = useContext(UserContext);
   const { item, formattedMoveInDate } = location.state;
   const [isChecked, setIsChecked] = useState(false);
+  const Navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,6 +29,7 @@ const ApplicationPage = () => {
       const appImage = item.images[0].data[0];
 
       const newApplication = {
+        listingId: item._id,
         unitType: item.unitType,
         street: item.street,
         streetNumber: item.streetNumber,
@@ -49,6 +51,7 @@ const ApplicationPage = () => {
 
       console.log("Server response:", response.data);
       toast.success("Ansökan skapad");
+      Navigate("/myapplications");
 
       const createdApplication = response.data.newApplication;
       user.applications.push(createdApplication);

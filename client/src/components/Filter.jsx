@@ -1,17 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsHouseDoor, BsBuildings, BsDoorOpen, BsPeople } from "react-icons/Bs";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { BsFilterLeft } from "react-icons/Bs";
 
 const Filter = ({ onFilter, handleFilter }) => {
-  const [minAmount, setMinAmount] = useState("");
-  const [maxAmount, setMaxAmount] = useState("");
-  const [numRooms, setNumRooms] = useState("");
-  const [unitType, setUnitType] = useState("");
-  const [amenities, setAmenities] = useState([]);
-  const [searchText, setSearchText] = useState("");
+  const [minAmount, setMinAmount] = useState(
+    localStorage.getItem("minAmount") || ""
+  );
+  const [maxAmount, setMaxAmount] = useState(
+    localStorage.getItem("maxAmount") || ""
+  );
+  const [numRooms, setNumRooms] = useState(
+    localStorage.getItem("numRooms") || ""
+  );
+  const [unitType, setUnitType] = useState(
+    localStorage.getItem("unitType") || ""
+  );
+  const [amenities, setAmenities] = useState(
+    localStorage.getItem("amenities")
+      ? JSON.parse(localStorage.getItem("amenities"))
+      : []
+  );
+  const [searchText, setSearchText] = useState(
+    localStorage.getItem("searchText") || ""
+  );
   const [show, setShow] = useState(false);
+
+  const isFilterActive =
+    minAmount || maxAmount || numRooms || amenities.length > 0 || searchText;
 
   const [filterCriteria, setFilterCriteria] = useState({
     unitType: "",
@@ -20,6 +37,21 @@ const Filter = ({ onFilter, handleFilter }) => {
     numRooms: "",
     amenities: [],
   });
+  const quickFilter = (selectedUnitType) => {
+    setUnitType(selectedUnitType === unitType ? "" : selectedUnitType);
+    onFilter({
+      ...filterCriteria,
+      unitType: selectedUnitType === unitType ? "" : selectedUnitType,
+    });
+  };
+  useEffect(() => {
+    localStorage.setItem("minAmount", minAmount);
+    localStorage.setItem("maxAmount", maxAmount);
+    localStorage.setItem("numRooms", numRooms);
+    localStorage.setItem("unitType", unitType);
+    localStorage.setItem("amenities", JSON.stringify(amenities));
+    localStorage.setItem("searchText", searchText);
+  }, [minAmount, maxAmount, numRooms, unitType, amenities, searchText]);
 
   const handleAmenitiesChange = (e) => {
     const amenity = e.target.value;
@@ -57,21 +89,7 @@ const Filter = ({ onFilter, handleFilter }) => {
   return (
     <div className="flex flex-row mx-auto mt-6 w-11/12 md:w-6/12">
       <button
-        onClick={() => {
-          if (unitType === "Hus") {
-            setUnitType(""); // Toggle unitType to an empty string
-            onFilter({
-              ...filterCriteria,
-              unitType: "",
-            });
-          } else {
-            setUnitType("Hus"); // Set unitType to "Hus" if it's not already
-            onFilter({
-              ...filterCriteria,
-              unitType: "Hus",
-            });
-          }
-        }}
+        onClick={() => quickFilter("Hus")}
         className={`flex flex-col items-center text-center py-1 w-1/5 ${
           unitType === "Hus" ? "selected rounded-xl" : ""
         }`}
@@ -80,22 +98,8 @@ const Filter = ({ onFilter, handleFilter }) => {
         <p className="text-xs py-1">Hus</p>
       </button>
       <button
-        onClick={() => {
-          if (unitType === "Lägenhet") {
-            setUnitType(""); // Toggle unitType to an empty string
-            onFilter({
-              ...filterCriteria,
-              unitType: "",
-            });
-          } else {
-            setUnitType("Lägenhet"); // Set unitType to "Hus" if it's not already
-            onFilter({
-              ...filterCriteria,
-              unitType: "Lägenhet",
-            });
-          }
-        }}
-        className={`flex flex-col items-center text-center px-2 py-1  w-1/5 ${
+        onClick={() => quickFilter("Lägenhet")}
+        className={`flex flex-col items-center text-center py-1 w-1/5 ${
           unitType === "Lägenhet" ? "selected rounded-xl" : ""
         }`}
       >
@@ -103,22 +107,8 @@ const Filter = ({ onFilter, handleFilter }) => {
         <p className="text-xs py-1">Lägenhet</p>
       </button>
       <button
-        onClick={() => {
-          if (unitType === "Rum") {
-            setUnitType(""); // Toggle unitType to an empty string
-            onFilter({
-              ...filterCriteria,
-              unitType: "",
-            });
-          } else {
-            setUnitType("Rum"); // Set unitType to "Hus" if it's not already
-            onFilter({
-              ...filterCriteria,
-              unitType: "Rum",
-            });
-          }
-        }}
-        className={`flex flex-col items-center text-center px-2 py-1 w-1/5 ${
+        onClick={() => quickFilter("Rum")}
+        className={`flex flex-col items-center text-center py-1 w-1/5 ${
           unitType === "Rum" ? "selected rounded-xl" : ""
         }`}
       >
@@ -126,33 +116,22 @@ const Filter = ({ onFilter, handleFilter }) => {
         <p className="text-xs py-1">Rum</p>
       </button>
       <button
-        onClick={() => {
-          if (unitType === "Kollektiv") {
-            setUnitType(""); // Toggle unitType to an empty string
-            onFilter({
-              ...filterCriteria,
-              unitType: "",
-            });
-          } else {
-            setUnitType("Kollektiv"); // Set unitType to "Hus" if it's not already
-            onFilter({
-              ...filterCriteria,
-              unitType: "Kollektiv",
-            });
-          }
-        }}
-        className={`flex flex-col items-center text-center px-2 py-1 w-1/5 ${
+        onClick={() => quickFilter("Kollektiv")}
+        className={`flex flex-col items-center text-center py-1 w-1/5 ${
           unitType === "Kollektiv" ? "selected rounded-xl" : ""
         }`}
       >
         <BsPeople size={32} />
         <p className="text-xs py-1">Kollektiv</p>
       </button>
+
       <Button
         onClick={handleShow}
-        className="flex flex-col items-center text-center px-2 py-1 w-1/5 "
+        className="relative flex flex-col items-center text-center px-2 py-1 w-1/5 "
       >
-        <BsFilterLeft size={32} />
+        <div className={isFilterActive ? "text-orange-500 drop-shadow" : ""}>
+          <BsFilterLeft size={32} />
+        </div>
         <p className="text-xs py-1">Filter</p>
       </Button>
 
@@ -274,7 +253,9 @@ const Filter = ({ onFilter, handleFilter }) => {
                         <button
                           key={index}
                           className={`room-button ${
-                            numRooms === index + 1 ? "selected" : ""
+                            String(numRooms) === String(index + 1)
+                              ? "selected"
+                              : ""
                           } px-5 py-1 mr-1 mb-1 rounded-xl border border-gray-300 min-w-[60px] h-[35px] w-[68px]`}
                           onClick={() => setNumRooms(index + 1)}
                         >

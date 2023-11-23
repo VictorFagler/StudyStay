@@ -40,7 +40,6 @@ const MyProfile = () => {
           // Om användaren är inloggad, visa användarinformation
           <>
             <h1>Välkommen {user.name}!</h1>
-            <p>Här kan du utföra några åtgärder:</p>
 
             <div className="flex flex-col items-center mt-6">
               <button

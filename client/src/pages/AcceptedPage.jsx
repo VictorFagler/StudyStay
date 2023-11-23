@@ -2,9 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import axios from "axios";
 const AcceptedPage = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { id } = useParams();
   const [acceptTerms, setAcceptTerms] = useState(false);
   const navigate = useNavigate();
@@ -27,6 +27,37 @@ const AcceptedPage = () => {
       toast.error("Acceptera villkoren");
     }
   };
+  const handleDeleteApplication = async (user, acceptedObject) => {
+    try {
+      const userId = user._id;
+      const applicationId = acceptedObject._id;
+
+      // Send DELETE request to delete the application
+      await axios.delete(`/users/${userId}/applications/${applicationId}`);
+
+      // Update the user context to reflect the deletion
+      const updatedUser = {
+        ...user,
+        applications: user.applications.filter(
+          (app) => app._id !== applicationId
+        ),
+      };
+      setUser(updatedUser);
+      navigate("/myapplications");
+      toast.success("Ansökan borttagen");
+
+      // Redirect the user or perform any other necessary actions after deletion
+      // For example, you may want to navigate to another page.
+      // navigate('/some-other-page');
+    } catch (error) {
+      console.error("Error deleting application:", error);
+
+      // Display a toast or alert to notify the user about the error
+      toast.error("An error occurred while deleting the application.");
+    }
+  };
+
+  console.log(acceptedObject);
 
   return (
     <>
@@ -109,7 +140,10 @@ const AcceptedPage = () => {
               </label>
             </div>
             <div className="buttons flex justify-center items-center space-x-6 md:justify-end">
-              <button className="rounded-2xl border-black border-2 py-1 px-4">
+              <button
+                onClick={() => handleDeleteApplication(user, acceptedObject)}
+                className="mt-2 bg-primary text-white py-0.5 px-4 w-32 rounded-2xl shadow-md shadow-gray-500"
+              >
                 TACKA NEJ
               </button>
               <button

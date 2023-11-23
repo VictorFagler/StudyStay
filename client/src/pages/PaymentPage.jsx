@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PaymentPage = () => {
   const { user, setUser } = useContext(UserContext);
   const { id } = useParams();
   const acceptedObject = user.applications.find((obj) => obj._id === id);
   const deposition = 1000;
+  const Navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -115,6 +116,11 @@ const PaymentPage = () => {
               <button
                 className="flex w-48 mx-auto uppercase justify-center bg-orange-800 text-white py-2 px-6 rounded-3xl shadow-xl mt-6"
                 type="submit"
+                onClick={() =>
+                  Navigate(`/acceptedpayment`, {
+                    state: { acceptedObject },
+                  })
+                }
               >
                 BETALA
               </button>
