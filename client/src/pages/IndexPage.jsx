@@ -154,7 +154,7 @@ const IndexPage = () => {
                   {item.street} {item.streetNumber} <span>{item.area}</span>
                 </div>
                 <div className="flex justify-between my-2">
-                  {item.price} kr/mån <span>BRF</span>
+                  {item.price} kr/mån <span>Brf</span>
                 </div>
                 <div className="flex justify-between">
                   {item.rooms} RoK <span>{item.size}m²</span>

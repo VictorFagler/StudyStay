@@ -82,7 +82,7 @@ const PaymentPage = () => {
                 <div className="mr-2 w-1/2">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2 opacity-75"
-                    htmlFor="expDate"
+                    htmlFor="expirationDate"
                   >
                     Utgångsdatum
                   </label>
@@ -113,6 +113,7 @@ const PaymentPage = () => {
                   />
                 </div>
               </div>
+              {/* KOMMER GE SUBMIT ERROR DÅ FUNKTIONALITET EJ IMPLEMENTERAD */}
               <button
                 className="flex w-48 mx-auto uppercase justify-center bg-orange-800 text-white py-2 px-6 rounded-3xl shadow-xl mt-6"
                 type="submit"

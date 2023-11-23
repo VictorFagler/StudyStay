@@ -1,9 +1,9 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const AcceptedPayment = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const location = useLocation();
   const acceptedObject = location.state?.acceptedObject;
   const Navigate = useNavigate();
@@ -40,16 +40,16 @@ const AcceptedPayment = () => {
           </div>
         </div>
         <div className=" mx-auto mt-6 md:flex ">
-          <div className=" md:mx-6 md:w-[30em]">
-            <div className="flex justify-center items-center h-[20em] ">
+          <div className=" md:mx-6 md:w-[30em]  rounded-b-xl">
+            <div className="flex justify-center items-center h-[20em]">
               <img
                 src={acceptedObject?.images[0].data}
                 alt="image"
-                className="rounded-2xl h-full md:h-[20em] w-full object-cover"
+                className="rounded-t-2xl h-full md:h-[20em] w-full object-cover"
               ></img>
             </div>
-            <div className="översikt px-4 pt-4 pb-10 flex-col space-y-2 ">
-              <p className="flex justify-between font-bold">
+            <div className="översikt px-4 pt-4 pb-6 mb-10 flex-col space-y-2 bg-gray-200 rounded-b-xl">
+              <p className="flex justify-between font-bold ">
                 {acceptedObject.street} {acceptedObject.streetNumber}{" "}
                 <span className="font-normal">{acceptedObject.area}</span>
               </p>

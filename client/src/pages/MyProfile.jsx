@@ -1,13 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import React, { useContext, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 
 const MyProfile = () => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -20,7 +22,6 @@ const MyProfile = () => {
   };
 
   const handleLogout = () => {
-    // Fiktiv funktion för att logga ut användaren
     setUser(null);
     navigate("/");
     toast.success("Du har loggat ut!");

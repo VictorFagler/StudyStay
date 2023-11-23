@@ -2,9 +2,14 @@ import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const MyApplication = () => {
   const { user, setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -40,21 +45,20 @@ const MyApplication = () => {
     }
   };
 
-  console.log("user apps: ", user?.applications);
   return (
-    <div className="container w-10/12 mx-auto mt-6 flex flex-col items-center justify-center">
+    <div className="container w-10/12 mx-auto my-6 mb-14 flex flex-col items-center justify-center">
       <h2 className="text-2xl md:text-4xl lg:text-6xl">Mina ansökningar</h2>
       <p>
         Nedan kan du se lägenheter som du har ansökt om och vad det är för
         status idag
       </p>
       {user ? (
-        <div className="applications-list w-full lg:max-w-2xl">
+        <div className="applications-list w-full lg:max-w-xl rounded-2xl">
           {user.applications ? (
             user.applications.map((application) => (
               <div
                 key={application._id}
-                className="application-box mt-6 flex flex-col pb-10 w-full"
+                className="application-box mt-6 flex flex-col pb-2 w-full rounded-xl"
               >
                 {application.images && application.images.length > 0 ? (
                   <div className="flex w-100 h-36 overflow-hidden justify-center">
@@ -72,7 +76,7 @@ const MyApplication = () => {
                 )}
                 <div className="grid grid-cols-2">
                   <Link to={`/listings/${application.listingId}`}>
-                    <div className="py-2 px-1 flex flex-col left">
+                    <div className="py-2 pl-4 flex flex-col left">
                       <p className="font-bold">
                         {application.street + " " + application.streetNumber}
                       </p>

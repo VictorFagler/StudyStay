@@ -116,7 +116,7 @@ const Filter = ({ onFilter, handleFilter }) => {
         <p className="text-xs py-1">Rum</p>
       </button>
       <button
-        onClick={() => quickFilter("Kollektiv")}
+        onClick={() => quickFilter("Korridor")}
         className={`flex flex-col items-center text-center py-1 w-1/5 ${
           unitType === "Kollektiv" ? "selected rounded-xl" : ""
         }`}
@@ -246,7 +246,7 @@ const Filter = ({ onFilter, handleFilter }) => {
                   />
                 </div>
                 <div className="border-b-2 border-gray-300">
-                  <div className="rooms px-4 py-4 ">
+                  <div className="rooms px-4 py-2 ">
                     <h4 className="font-bold text-lg">Antal rum</h4>
                     <div className="room-options flex flex-wrap justify-center">
                       {[...Array(10)].map((_, index) => (
@@ -267,7 +267,7 @@ const Filter = ({ onFilter, handleFilter }) => {
 
                   {/* BEKVÄMLIGHETER */}
 
-                  <div className="amenities px-4 py-4">
+                  <div className="amenities px-4 pb-4">
                     <h4 className="font-bold text-lg">Bekvämligheter</h4>
                     <p className="text-sm pb-2">Välj alternativ</p>
                     <div className="amenities-options grid grid-cols-2 gap-2">

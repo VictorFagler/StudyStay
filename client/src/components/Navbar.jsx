@@ -52,7 +52,7 @@ export const Navbar = () => {
     <nav className="bg-white relative">
       <div className="flex justify between items-center text-black py-5 px-8">
         <div className="flex items-center">
-          <Link to="/" className="absolute">
+          <Link to="/" className="absolute h-">
             <img src="/studystay-logo.png" alt="Logo" className="scale-75" />
           </Link>
         </div>

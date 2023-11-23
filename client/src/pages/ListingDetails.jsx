@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { BiWifi, BiSolidParking, BiMap } from "react-icons/Bi";
 import {
@@ -19,6 +19,7 @@ import { GrMoney } from "react-icons/Gr";
 import { IoTodayOutline, IoBedOutline } from "react-icons/Io5";
 import { LuBox } from "react-icons/Lu";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const ListingDetails = () => {
   const { id } = useParams();
@@ -52,19 +53,23 @@ const ListingDetails = () => {
   }, [id]);
 
   if (item === null) {
-    return <div>Item not found</div>;
+    return (
+      <div className="mt-20 flex justify-center">
+        <AiOutlineLoading3Quarters />
+      </div>
+    );
   }
 
-  const dateFromDatabase = new Date(item.date);
-  const formattedDate = dateFromDatabase.toLocaleDateString("en-US", {
+  const dateFromDatabase = new Date(item?.date);
+  const formattedDate = dateFromDatabase?.toLocaleDateString("en-US", {
     day: "numeric",
     month: "numeric",
     year: "numeric",
   });
 
-  const moveInDate = new Date(item.date);
-  moveInDate.setMonth(moveInDate.getMonth() - 3);
-  const formattedMoveInDate = moveInDate.toLocaleDateString("en-US", {
+  const moveInDate = new Date(item?.date);
+  moveInDate?.setMonth(moveInDate?.getMonth() - 3);
+  const formattedMoveInDate = moveInDate?.toLocaleDateString("en-US", {
     day: "numeric",
     month: "numeric",
     year: "numeric",
@@ -327,9 +332,11 @@ const ListingDetails = () => {
                 to={`/application/${item._id}`}
                 state={{ item, formattedMoveInDate }}
               >
-                <button className="w-48 mx-auto uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl">
-                  Till ansökan
-                </button>
+                <div className="flex justif-center">
+                  <button className="w-48 mx-auto uppercase bg-orange-800 text-white py-2 px-6 rounded-3xl">
+                    Till ansökan
+                  </button>
+                </div>
               </Link>
             </div>
 

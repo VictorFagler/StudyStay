@@ -1,12 +1,12 @@
 import { React, useState, useContext, useEffect } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../context/userContext";
 import { toast } from "react-hot-toast";
 
 const ApplicationPage = () => {
   const location = useLocation();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { item, formattedMoveInDate } = location.state;
   const [isChecked, setIsChecked] = useState(false);
   const Navigate = useNavigate();
@@ -49,7 +49,6 @@ const ApplicationPage = () => {
         applications: newApplication,
       });
 
-      console.log("Server response:", response.data);
       toast.success("Ansökan skapad");
       Navigate("/myapplications");
 
@@ -68,9 +67,9 @@ const ApplicationPage = () => {
 
   return (
     <>
-      <div className="pagecontainer md:w-10/12 max-w-[1400px] mx-auto mb-36 mt-10">
-        <div>
-          <h1 className="text-2xl md:text-4xl lg:text-6xl justify-center text-center">
+      <div className="pagecontainer md:w-10/12 max-w-[1400px] mx-auto mb-36">
+        <div className="py-6">
+          <h1 className="text-4xl lg:text-6xl justify-center text-center">
             Ansök till {item.street} {item.streetNumber}
           </h1>
         </div>
@@ -83,7 +82,7 @@ const ApplicationPage = () => {
                 className="md:h-[38em] object-cover rounded-xl rounded-b-none lg:rounded-b-xl"
               />
             </div>
-            <div className="översikt max-w-2xl bg-gray-300 px-8 py-8 rounded-xl flex-col space-y-1 rounded-t-none lg:rounded-t-xl">
+            <div className="översikt max-w-[25.4em] bg-gray-300 px-8 py-8 rounded-xl flex-col space-y-1 rounded-t-none lg:rounded-t-xl">
               <h2 className="font-bold text-lg mb-6">Översikt</h2>
               <p className="flex justify-between">
                 Hyra: <span>{item.price} kr/mån</span>

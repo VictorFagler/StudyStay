@@ -3,6 +3,7 @@ import { UserContext } from "../../context/userContext";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+
 const AcceptedPage = () => {
   const { user, setUser } = useContext(UserContext);
   const { id } = useParams();
@@ -20,10 +21,8 @@ const AcceptedPage = () => {
 
   const handleAcceptButton = () => {
     if (acceptTerms) {
-      console.log("Terms accepted. Redirecting to payment page...");
       navigate(`/payment/${acceptedObject._id}`);
     } else {
-      console.error("Please accept the terms before proceeding.");
       toast.error("Acceptera villkoren");
     }
   };
@@ -32,10 +31,8 @@ const AcceptedPage = () => {
       const userId = user._id;
       const applicationId = acceptedObject._id;
 
-      // Send DELETE request to delete the application
       await axios.delete(`/users/${userId}/applications/${applicationId}`);
 
-      // Update the user context to reflect the deletion
       const updatedUser = {
         ...user,
         applications: user.applications.filter(
@@ -45,19 +42,10 @@ const AcceptedPage = () => {
       setUser(updatedUser);
       navigate("/myapplications");
       toast.success("Ansökan borttagen");
-
-      // Redirect the user or perform any other necessary actions after deletion
-      // For example, you may want to navigate to another page.
-      // navigate('/some-other-page');
     } catch (error) {
-      console.error("Error deleting application:", error);
-
-      // Display a toast or alert to notify the user about the error
       toast.error("An error occurred while deleting the application.");
     }
   };
-
-  console.log(acceptedObject);
 
   return (
     <>
@@ -76,15 +64,15 @@ const AcceptedPage = () => {
         </div>
       </div>
       <div className="container mx-auto mt-6 md:flex">
-        <div className=" md:mx-6 md:w-[20em]">
+        <div className=" md:mx-6 md:w-[20em] px-2 mb-6">
           <div className="flex justify-center items-center h-[20em] ">
             <img
               src={acceptedObject?.images[0].data}
               alt="image"
-              className="rounded-2xl h-full md:h-[20em] w-full object-cover"
+              className="rounded-t-2xl h-full md:h-[20em] w-full object-cover"
             ></img>
           </div>
-          <div className="översikt px-4 pt-4 pb-10 flex-col space-y-2 ">
+          <div className="översikt px-4 pt-4 pb-4 flex-col space-y-2 bg-gray-200 rounded-b-xl ">
             <p className="flex justify-between font-bold">
               {acceptedObject.street} {acceptedObject.streetNumber}{" "}
               <span className="font-normal">{acceptedObject.area}</span>
@@ -148,7 +136,7 @@ const AcceptedPage = () => {
               </button>
               <button
                 onClick={handleAcceptButton}
-                className="text-white bg-primary rounded-xl 2 py-1 px-4 shadow-lg"
+                className="mt-2 bg-primary text-white py-0.5 px-4 w-32 rounded-2xl shadow-md shadow-gray-500"
               >
                 TACKA JA
               </button>
