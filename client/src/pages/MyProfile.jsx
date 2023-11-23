@@ -7,13 +7,12 @@ import { UserContext } from "../../context/userContext";
 const MyProfile = () => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
- 
+
   useEffect(() => {
     if (!user) {
       navigate("/login");
     }
   }, [user, navigate]);
-
 
   const handleChangePassword = () => {
     // Fiktiv funktion för att hantera lösenordsbyte
@@ -44,6 +43,12 @@ const MyProfile = () => {
             <p>Här kan du utföra några åtgärder:</p>
 
             <div className="flex flex-col items-center mt-6">
+              <button
+                onClick={() => navigate("/myapplications")}
+                className="mt-4 w-48 uppercase bg-primary text-white py-2 px-6 rounded-3xl drop-shadow-xl"
+              >
+                Ansökningar
+              </button>
               <button
                 onClick={handleChangePassword}
                 className="mt-4 w-48 uppercase bg-blue-500 text-white py-2 px-6 rounded-3xl drop-shadow-xl"

@@ -42,7 +42,7 @@ const MyApplication = () => {
   console.log("user apps: ", user?.applications);
   return (
     <div className="container w-10/12 mx-auto mt-6 flex flex-col items-center justify-center">
-      <h2 className="">Mina ansökningar</h2>
+      <h2 className="text-2xl md:text-4xl lg:text-6xl">Mina ansökningar</h2>
       <p>
         Nedan kan du se lägenheter som du har ansökt om och vad det är för
         status idag
@@ -78,12 +78,29 @@ const MyApplication = () => {
                     <p>{application.area}</p>
                   </div>
                   <div className="py-2 px-4 flex flex-col right justify-between text-right ml-auto">
-                    {application.isOpen === false ? (
+                    {application.status === "denied" ? (
                       <>
                         <div className="flex items-center ml-auto">
                           <div className="bg-red-500 w-4 h-4 rounded-full mr-2"></div>
                           <div>
                             <p>Ej godkänd</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() =>
+                            handleDeleteApplication(user, application)
+                          }
+                          className="mt-2 bg-primary text-white py-0.5 px-4 w-32 rounded-2xl shadow-md shadow-gray-500"
+                        >
+                          TA BORT
+                        </button>
+                      </>
+                    ) : application.status === "pending" ? (
+                      <>
+                        <div className="flex items-center ml-auto">
+                          <div className="bg-yellow-600 w-4 h-4 rounded-full mr-2"></div>
+                          <div>
+                            <p>Obehandlad</p>
                           </div>
                         </div>
                         <button
@@ -103,9 +120,8 @@ const MyApplication = () => {
                             <p>Godkänd</p>
                           </div>
                         </div>
-
                         <Link to={`/accepted/${application._id}`}>
-                          <button className="mt-2 bg-primary text-white py-0.5 px-4 w-32 rounded-2xl shadow-md shadow-gray-500 ">
+                          <button className="mt-2 bg-primary text-white py-0.5 px-4 w-32 rounded-2xl shadow-md shadow-gray-500">
                             GÅ VIDARE
                           </button>
                         </Link>

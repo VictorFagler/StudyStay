@@ -1,66 +1,126 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AcceptedPage = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { id } = useParams();
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const navigate = useNavigate();
 
-  const acceptedObject = user.applications.find((obj) => obj._id === id);
-  console.log("User:", user);
-  console.log("acceptedobject:", acceptedObject);
+  const acceptedObject = user?.applications?.find((obj) => obj._id === id);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleCheckboxChange = () => {
+    setAcceptTerms(!acceptTerms);
+  };
+
+  const handleAcceptButton = () => {
+    if (acceptTerms) {
+      console.log("Terms accepted. Redirecting to payment page...");
+      navigate(`/payment/${acceptedObject._id}`);
+    } else {
+      console.error("Please accept the terms before proceeding.");
+      toast.error("Acceptera villkoren");
+    }
+  };
+
   return (
     <>
       <div>
-        <h1>Grattis {user.name}!</h1>
+        <div className="w-10/12 mx-auto lg:w-8/12">
+          <div className="my-6">
+            <h1 className="text-2xl text-center">
+              Grattis {user?.name}! Din ansökan för bostaden har blivit godkänd!
+            </h1>
+            <p className="py-4">
+              Kontrollera informationen nedan noggrant innan du tackar ja till
+              bostaden. Det är viktigt att all information stämmer och att du
+              känner till alla villkor och krav innan du fortsätter
+            </p>
+          </div>
+        </div>
       </div>
-      <div>ID: {id}</div>
-      <img src={acceptedObject.images[0].data} alt="image"></img>
-      <p>
-        {acceptedObject.street} {acceptedObject.streetNumber},{" "}
-        {acceptedObject.zipcode}
-        {acceptedObject.price}
-      </p>
-      <p>{acceptedObject.area}</p>
-      <div></div>
-
-      <div>
-        <h4 className="font-bold">
-          Viktiga krav och villkor från hyresföreningen:
-        </h4>
-        <p className="py-2">
-          <span className="font-bold">1. Deposition:</span> En deposition om 5
-          000 kr måste betalas inom 7 dagar från accepterade datumet. Denna
-          summa återbetalas när du flttar ut, förutsatt att bostaden lämnas i
-          ursprungligt skick
-        </p>
-        <p className="py-2">
-          <span className="font-bold">2. Husdjur:</span> Husdjur är tillåtna,
-          men en särskild avgift om 200 kr/månad tillkommer
-        </p>
-        <p className="py-2">
-          <span className="font-bold">3. Rökning:</span> Rökning är strikt
-          förbjuden inom bostadens område, inklusive balkonger och gemensamma
-          utrymmen
-        </p>
-        <p className="py-2">
-          <span className="font-bold">4. Inflyttningsdatum:</span>{" "}
-          Inflyttningsdatum är den 1:a varje månadad. Var god se till att
-          koordinera med fastighetsskötaren för att undvika kollisione
-        </p>
-        <p className="py-2">
-          <span className="font-bold"> 5. Uppsägningstid:</span>{" "}
-          Uppsägningstiden är tre månader från och med den första i nästa månad
-          efter att uppsägning har gjorts
-        </p>
-        <button className=" bg-white rounded-2xl border-black border-2 py-1 px-4">
-          TACKA NEJ
-        </button>
-        <Link to={`/payment/${acceptedObject._id}`}>
-          <button className="text-white bg-primary rounded-xl 2 py-1 px-4">
-            TILL BETALNING
-          </button>
-        </Link>
+      <div className="container mx-auto mt-6 md:flex">
+        <div className=" md:mx-6 md:w-[20em]">
+          <div className="flex justify-center items-center h-[20em] ">
+            <img
+              src={acceptedObject?.images[0].data}
+              alt="image"
+              className="rounded-2xl h-full md:h-[20em] w-full object-cover"
+            ></img>
+          </div>
+          <div className="översikt px-4 pt-4 pb-10 flex-col space-y-2 ">
+            <p className="flex justify-between font-bold">
+              {acceptedObject.street} {acceptedObject.streetNumber}{" "}
+              <span className="font-normal">{acceptedObject.area}</span>
+            </p>
+            <p className="flex justify-between">
+              {acceptedObject.price} kr/mån <span>Brf</span>
+            </p>
+            <p className="flex justify-between">
+              {acceptedObject.rooms} kr/mån{" "}
+              <span>{acceptedObject.size} kvm</span>
+            </p>
+          </div>
+        </div>
+        <div className="md:w-2/3 mx-5">
+          <h4 className="font-bold">
+            Viktiga krav och villkor från hyresföreningen:
+          </h4>
+          <p className="py-2">
+            <span className="font-bold">1. Deposition:</span> En deposition om 5
+            000 kr måste betalas inom 7 dagar från accepterade datumet. Denna
+            summa återbetalas när du flttar ut, förutsatt att bostaden lämnas i
+            ursprungligt skick
+          </p>
+          <p className="py-2">
+            <span className="font-bold">2. Husdjur:</span> Husdjur är tillåtna,
+            men en särskild avgift om 200 kr/månad tillkommer
+          </p>
+          <p className="py-2">
+            <span className="font-bold">3. Rökning:</span> Rökning är strikt
+            förbjuden inom bostadens område, inklusive balkonger och gemensamma
+            utrymmen
+          </p>
+          <p className="py-2">
+            <span className="font-bold">4. Inflyttningsdatum:</span>{" "}
+            Inflyttningsdatum är den 1:a varje månadad. Var god se till att
+            koordinera med fastighetsskötaren för att undvika kollisione
+          </p>
+          <p className="py-2">
+            <span className="font-bold"> 5. Uppsägningstid:</span>{" "}
+            Uppsägningstiden är tre månader från och med den första i nästa
+            månad efter att uppsägning har gjorts
+          </p>
+          <div className="md:ml-auto">
+            <div className="flex terms-checkbox py-4 justify-center md:justify-end">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                Jag godkänner hyresvärdens villkor
+              </label>
+            </div>
+            <div className="buttons flex justify-center items-center space-x-6 md:justify-end">
+              <button className="rounded-2xl border-black border-2 py-1 px-4">
+                TACKA NEJ
+              </button>
+              <button
+                onClick={handleAcceptButton}
+                className="text-white bg-primary rounded-xl 2 py-1 px-4 shadow-lg"
+              >
+                TACKA JA
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

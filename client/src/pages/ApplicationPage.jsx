@@ -21,7 +21,6 @@ const ApplicationPage = () => {
   const handleApplication = async () => {
     try {
       if (!isChecked) {
-        // Om checkboxen inte är markerad, ge användaren ett meddelande
         toast.error("Du måste godkänna villkoren för att ansöka.");
         return;
       }
@@ -34,31 +33,29 @@ const ApplicationPage = () => {
         streetNumber: item.streetNumber,
         zipcode: item.zipcode,
         area: item.area,
-        isOpen: false,
+        status: item.status,
+        rooms: item.rooms,
         price: item.price,
+        size: item.size,
         image: {
           data: appImage,
           contentType: "image/jpeg",
         },
       };
 
-      // Send a POST request to the server
       const response = await axios.post(`/users/${userId}/applications`, {
         applications: newApplication,
       });
 
-      // Log the actual response from the server
       console.log("Server response:", response.data);
       toast.success("Ansökan skapad");
 
-      // Assuming the server responds with the created application
       const createdApplication = response.data.newApplication;
       user.applications.push(createdApplication);
 
       if (!userId) {
         console.error("User ID not found");
         toast.error("No user ID found");
-        return;
       }
     } catch (error) {
       console.error("Error submitting application:", error);
@@ -74,19 +71,17 @@ const ApplicationPage = () => {
             Ansök till {item.street} {item.streetNumber}
           </h1>
         </div>
-
-        {/* Parent container for leftside and rightside */}
         <div className="flex flex-wrap justify-center">
-          <div className="lg:w-1/2 p-4 pr-6">
-            <div className="mb-8 max-w-2xl ">
+          <div className="lg:w-1/2 p-4 pr-6 md:max-w-lg">
+            <div className=" lg:mb-8">
               <img
                 src={`${item.images[0].data[0]}`}
                 alt={item.title}
-                className="md:h-[38em] object-cover rounded-xl"
+                className="md:h-[38em] object-cover rounded-xl rounded-b-none lg:rounded-b-xl"
               />
             </div>
-            <div className="översikt max-w-2xl bg-gray-300 px-8 py-12 rounded-xl flex-col space-y-1 ">
-              <h2 className="font-bold text-lg mb-6 mt-[-15px]">Översikt</h2>
+            <div className="översikt max-w-2xl bg-gray-300 px-8 py-8 rounded-xl flex-col space-y-1 rounded-t-none lg:rounded-t-xl">
+              <h2 className="font-bold text-lg mb-6">Översikt</h2>
               <p className="flex justify-between">
                 Hyra: <span>{item.price} kr/mån</span>
               </p>

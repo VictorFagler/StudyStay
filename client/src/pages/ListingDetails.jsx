@@ -111,11 +111,11 @@ const ListingDetails = () => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
-  const handleTouchEnd = (itemIndex) => {
-    if (touchStart - touchEnd > 50) {
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 100) {
       // Swipe left
       nextImage();
-    } else if (touchEnd - touchStart > 50) {
+    } else if (touchEnd - touchStart > 100) {
       // Swipe right
       prevImage();
     }
@@ -224,7 +224,7 @@ const ListingDetails = () => {
           </div>
         </div>
         {restOfImages.length > 0 ? (
-          // Render additional images if there are more than 0
+          // Render additional images if > 4 total
           <div className="AdditionImages hidden lg:flex lg:h-[24em]">
             {restOfImages.map((imageData, index) => (
               <div key={index} className="flex h-full w-1/4 py-2 px-3">
@@ -238,7 +238,7 @@ const ListingDetails = () => {
           </div>
         ) : null}
         <div className=" mx-auto mt-8 flex flex-wrap md:flex-nowrap justify-center">
-          <div className="w-full md:flex-start p-3 md:pr-16 md:mr-28">
+          <div className="w-full md:flex-start p-3 lg:pr-16 md:mr-10">
             <h1 className="text-4xl">
               {item.street} {item.streetNumber}
             </h1>
@@ -246,10 +246,9 @@ const ListingDetails = () => {
               {item.price}kr/mån | {item.rooms} RoK | {item.size}m²
             </h2>
             <p className="my-8">
-              {" "}
-              Välkommen till Ufsparregatan i Lunden! Här finns nu en ljus och
-              välplanerad lägenhet i fastighet som stod klar för inflyttning i
-              lutet av 2018. I nära anslutning till porten finns allmänna
+              Välkommen till {item.street} i {item.area}! Här finns nu en ljus
+              och välplanerad lägenhet i fastighet som stod klar för inflyttning
+              i lutet av 2018. I nära anslutning till porten finns allmänna
               kommunikationer som tar dig till city på några minuter. Från
               Redbergsplatsen går även flera spårvagnar in till centrum eller
               vidare österut. För dig som hellre väljer cykel och inte är rädd
@@ -283,7 +282,7 @@ const ListingDetails = () => {
               lägenheten innan du som sökande får ett ev. erbjudande om visning.
               <br />
               <br />
-              Välkommen med din ansökan!{" "}
+              Välkommen med din ansökan!
             </p>
           </div>
 
@@ -378,7 +377,7 @@ const ListingDetails = () => {
                 </div>
               )}
               {item.amenities.includes("Hiss") && (
-                <div className="flex flex-col items-center justify-center w-1/4 p-2 mb-4">
+                <div className="flex flex-col items-center justify-center w-1/3 p-2 mb-4">
                   {amenityIcons["Hiss"]}
                   <span>Hiss</span>
                 </div>
